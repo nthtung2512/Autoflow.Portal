@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\base\Autoflow.Portal.Base\Autoflow.Portal.Base.csproj" />
+    <ProjectReference Include="..\Autoflow.Portal.Application.Contracts\Autoflow.Portal.Application.Contracts.csproj" />
+    <ProjectReference Include="..\Autoflow.Portal.EntityFrameworkCore\Autoflow.Portal.EntityFrameworkCore.csproj" />
+  </ItemGroup>
+
+</Project>
