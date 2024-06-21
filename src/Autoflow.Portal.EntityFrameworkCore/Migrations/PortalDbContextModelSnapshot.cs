@@ -22,58 +22,144 @@ namespace Autoflow.Portal.EntityFrameworkCore.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("Autoflow.Portal.Domain.RunnerBots.RunnerBot", b =>
+            modelBuilder.Entity("Autoflow.Portal.Domain.ChatBox.Conversation", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("integer");
-
                     b.HasKey("Id");
 
-                    b.ToTable("runner_bot", (string)null);
+                    b.ToTable("Conversations", (string)null);
                 });
 
-            modelBuilder.Entity("Autoflow.Portal.Domain.RunnerBots.RunnerEvent", b =>
+            modelBuilder.Entity("Autoflow.Portal.Domain.ChatBox.Message", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<Guid>("BotId")
                         .HasColumnType("uuid");
 
-                    b.Property<bool>("IsSuccess")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("Message")
+                    b.Property<string>("Content")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
+
+                    b.Property<Guid>("ConversationId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ReceiveUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("SendUserId")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BotId");
+                    b.HasIndex("ConversationId");
 
-                    b.ToTable("runner_event", (string)null);
+                    b.HasIndex("ReceiveUserId");
+
+                    b.HasIndex("SendUserId");
+
+                    b.ToTable("Messages", (string)null);
                 });
 
-            modelBuilder.Entity("Autoflow.Portal.Domain.RunnerBots.RunnerEvent", b =>
+            modelBuilder.Entity("Autoflow.Portal.Domain.ChatBox.User", b =>
                 {
-                    b.HasOne("Autoflow.Portal.Domain.RunnerBots.RunnerBot", "Bot")
-                        .WithMany()
-                        .HasForeignKey("BotId")
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasMaxLength(16)
+                        .HasColumnType("character varying(16)");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasMaxLength(32)
+                        .HasColumnType("character varying(32)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Users", (string)null);
+                });
+
+            modelBuilder.Entity("Autoflow.Portal.Domain.ChatBox.UserConversationMap", b =>
+                {
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ConversationId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("UserId", "ConversationId");
+
+                    b.HasIndex("ConversationId");
+
+                    b.ToTable("UserConversationMaps", (string)null);
+                });
+
+            modelBuilder.Entity("Autoflow.Portal.Domain.ChatBox.Message", b =>
+                {
+                    b.HasOne("Autoflow.Portal.Domain.ChatBox.Conversation", "Conversation")
+                        .WithMany("Messages")
+                        .HasForeignKey("ConversationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Bot");
+                    b.HasOne("Autoflow.Portal.Domain.ChatBox.User", "Receiver")
+                        .WithMany("ReceivedMessages")
+                        .HasForeignKey("ReceiveUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Autoflow.Portal.Domain.ChatBox.User", "Sender")
+                        .WithMany("SentMessages")
+                        .HasForeignKey("SendUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Conversation");
+
+                    b.Navigation("Receiver");
+
+                    b.Navigation("Sender");
+                });
+
+            modelBuilder.Entity("Autoflow.Portal.Domain.ChatBox.UserConversationMap", b =>
+                {
+                    b.HasOne("Autoflow.Portal.Domain.ChatBox.Conversation", "Conversation")
+                        .WithMany("UserConversations")
+                        .HasForeignKey("ConversationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Autoflow.Portal.Domain.ChatBox.User", "User")
+                        .WithMany("UserConversations")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Conversation");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Autoflow.Portal.Domain.ChatBox.Conversation", b =>
+                {
+                    b.Navigation("Messages");
+
+                    b.Navigation("UserConversations");
+                });
+
+            modelBuilder.Entity("Autoflow.Portal.Domain.ChatBox.User", b =>
+                {
+                    b.Navigation("ReceivedMessages");
+
+                    b.Navigation("SentMessages");
+
+                    b.Navigation("UserConversations");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,8 +1,8 @@
 {
-	"recommendations": [
-		"svelte.svelte-vscode",
-		"esbenp.prettier-vscode",
-		"bradlc.vscode-tailwindcss",
-		"webhint.vscode-webhint"
-	]
+  "recommendations": [
+    "Vue.volar",
+    "ms-playwright.playwright",
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode"
+  ]
 }
