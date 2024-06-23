@@ -1,4 +1,5 @@
-﻿using Autoflow.Portal.Domain.ChatBox;
+﻿using Autoflow.Portal.Domain;
+using Autoflow.Portal.Domain.ChatBox;
 using Microsoft.EntityFrameworkCore;
 
 namespace Autoflow.Portal.EntityFrameworkCore.EntityFrameworkCore
@@ -22,8 +23,14 @@ namespace Autoflow.Portal.EntityFrameworkCore.EntityFrameworkCore
             // Configuring User
             builder.Entity<User>(b =>
             {
-                b.ToTable("Users");
+                b.ToTable(PortalConst.DbTablePrefix + "users", PortalConst.DbSchema);
                 b.HasKey(u => u.Id);
+
+                b.HasIndex(u => u.Username)
+                .IsUnique();
+
+                b.HasIndex(u => u.Password)
+                .IsUnique();
 
                 b.HasMany(u => u.SentMessages)
                  .WithOne(m => m.Sender)
@@ -39,7 +46,7 @@ namespace Autoflow.Portal.EntityFrameworkCore.EntityFrameworkCore
             // Configuring Message
             builder.Entity<Message>(b =>
             {
-                b.ToTable("Messages");
+                b.ToTable(PortalConst.DbTablePrefix + "messages", PortalConst.DbSchema);
                 b.HasKey(m => m.Id);
 
                 b.HasOne(m => m.Conversation)
@@ -60,7 +67,7 @@ namespace Autoflow.Portal.EntityFrameworkCore.EntityFrameworkCore
             // Configuring Conversation
             builder.Entity<Conversation>(b =>
             {
-                b.ToTable("Conversations");
+                b.ToTable(PortalConst.DbTablePrefix + "conversations", PortalConst.DbSchema);
                 b.HasKey(c => c.Id);
 
                 b.HasMany(c => c.Messages)
@@ -72,7 +79,7 @@ namespace Autoflow.Portal.EntityFrameworkCore.EntityFrameworkCore
             // How to create multi-columns key
             builder.Entity<UserConversationMap>(b =>
             {
-                b.ToTable("UserConversationMaps");
+                b.ToTable(PortalConst.DbTablePrefix + "user_conversation_maps", PortalConst.DbSchema);
                 b.HasKey(uc => new { uc.UserId, uc.ConversationId });
 
                 b.HasOne(uc => uc.User)

@@ -1,5 +1,7 @@
 using Autoflow.Portal.Base;
 using Autoflow.Portal.Host;
+using Autoflow.Portal.Host.Hubs;
+using Microsoft.AspNetCore.Cors.Infrastructure;
 using Serilog;
 using Serilog.Events;
 
@@ -23,6 +25,9 @@ var builder = WebApplication.CreateBuilder(args);
 // Configure Serilog as the logging provider
 builder.Host.UseSerilog();
 
+// Add services to the container.
+builder.Services.AddSignalR();
+
 // Register services with the dependency injection (DI) container
 builder.Services.AddControllers();          // Add services for controllers to the container
 builder.Services.AddEndpointsApiExplorer(); // Add services for API endpoint exploration (useful for tools like Swagger)
@@ -30,6 +35,18 @@ builder.Services.AddSwaggerGen();           // Add services required to generate
 
 // Register custom modules with the DI container
 builder.AddModules<AutoflowPortalApiModule>();
+
+builder.Services.AddCors((options) =>
+{
+    options.AddPolicy("PortalChatBox",
+        new CorsPolicyBuilder()
+            .WithOrigins("http://localhost:5173")
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials()
+            .Build());
+});
+
 
 // Build the web application
 var app = builder.Build();
@@ -46,6 +63,9 @@ app.UseHttpsRedirection();
 
 // Adds middleware to handle authorization checks for incoming requests.
 app.UseAuthorization();
+
+app.UseCors("PortalChatBox");
+app.MapHub<ChatHub>("/chatHub");
 
 // Maps controller endpoints to the request pipeline, setting up routes to handle incoming HTTP requests.
 app.MapControllers();

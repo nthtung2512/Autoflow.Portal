@@ -7,5 +7,10 @@ namespace Autoflow.Portal.Domain.ChatBox
     {
         public ICollection<Message> Messages { get; set; } = new List<Message>();
         public ICollection<UserConversationMap> UserConversations { get; set; } = new List<UserConversationMap>();
+
+        public Conversation(Guid id) : base(id)
+        {
+
+        }
     }
 }

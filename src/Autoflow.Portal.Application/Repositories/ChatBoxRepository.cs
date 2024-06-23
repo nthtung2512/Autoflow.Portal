@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 // Implement the methods for CRUP API for User, Message, and Conversation
 namespace Autoflow.Portal.Infrastructure.Repositories
 {
-    public class ChatBoxRepository : IChatBoxRepository
+    public class ChatBoxRepository : IChatBoxRepository, IDisposable
     {
         private readonly PortalDbContext _context;
 
@@ -94,7 +94,47 @@ namespace Autoflow.Portal.Infrastructure.Repositories
             await _context.SaveChangesAsync();
         }
 
-        // Additional methods as needed for your application
+        // UserConversation Map API
+        public async Task<IEnumerable<UserConversationMap>> GetAllUserConversationMaps()
+        {
+            return await _context.UserConversationMaps.ToListAsync();
+        }
+        public async Task<IEnumerable<UserConversationMap>> GetMapByUserId(Guid userId)
+        {
+            return await _context.UserConversationMaps
+                .Where(ucm => ucm.UserId == userId)
+                .ToListAsync();
+        }
+        public async Task<IEnumerable<UserConversationMap>> GetMapByConversationId(Guid conversationId)
+        {
+            return await _context.UserConversationMaps
+                .Where(ucm => ucm.ConversationId == conversationId)
+                .ToListAsync();
+        }
+        public async Task AddUserConversationMapAsync(UserConversationMap userConversationMap)
+        {
+            _context.UserConversationMaps.Add(userConversationMap);
+            await _context.SaveChangesAsync();
+        }
 
+        // Additional methods as needed for your application
+        #region dispose
+        private bool disposed = false;
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposed)
+            {
+                if (disposing) _context.Dispose();
+            }
+            disposed = true;
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+        #endregion
     }
 }

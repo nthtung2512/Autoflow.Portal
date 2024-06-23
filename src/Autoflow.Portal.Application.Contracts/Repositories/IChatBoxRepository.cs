@@ -22,6 +22,14 @@ namespace Autoflow.Portal.Application.Contracts.Repositories
         Task AddConversationAsync(Conversation conversation);
         Task UpdateConversationAsync(Conversation conversation);
 
+        // UserConversation Map API
+        Task<IEnumerable<UserConversationMap>> GetAllUserConversationMaps();
+        Task<IEnumerable<UserConversationMap>> GetMapByUserId(Guid userId);
+        Task<IEnumerable<UserConversationMap>> GetMapByConversationId(Guid conversationId);
+        Task AddUserConversationMapAsync(UserConversationMap userConversationMap);
+
+
+
         // Additional methods as needed for your application
     }
 }

@@ -30,7 +30,7 @@ namespace Autoflow.Portal.EntityFrameworkCore.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Conversations", (string)null);
+                    b.ToTable("conversations", (string)null);
                 });
 
             modelBuilder.Entity("Autoflow.Portal.Domain.ChatBox.Message", b =>
@@ -61,7 +61,7 @@ namespace Autoflow.Portal.EntityFrameworkCore.Migrations
 
                     b.HasIndex("SendUserId");
 
-                    b.ToTable("Messages", (string)null);
+                    b.ToTable("messages", (string)null);
                 });
 
             modelBuilder.Entity("Autoflow.Portal.Domain.ChatBox.User", b =>
@@ -82,7 +82,13 @@ namespace Autoflow.Portal.EntityFrameworkCore.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users", (string)null);
+                    b.HasIndex("Password")
+                        .IsUnique();
+
+                    b.HasIndex("Username")
+                        .IsUnique();
+
+                    b.ToTable("users", (string)null);
                 });
 
             modelBuilder.Entity("Autoflow.Portal.Domain.ChatBox.UserConversationMap", b =>
@@ -97,7 +103,7 @@ namespace Autoflow.Portal.EntityFrameworkCore.Migrations
 
                     b.HasIndex("ConversationId");
 
-                    b.ToTable("UserConversationMaps", (string)null);
+                    b.ToTable("user_conversation_maps", (string)null);
                 });
 
             modelBuilder.Entity("Autoflow.Portal.Domain.ChatBox.Message", b =>

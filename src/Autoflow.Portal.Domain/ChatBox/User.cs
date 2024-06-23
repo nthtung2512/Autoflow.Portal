@@ -15,6 +15,13 @@ namespace Autoflow.Portal.Domain.ChatBox
         [StringLength(16, MinimumLength = 4)]
         public string Password { get; set; } = string.Empty;
 
+        public User(Guid id, string username, string password)
+            : base(id)
+        {
+            Username = username;
+            Password = password;
+        }
+
         // Navigation Properties
         public ICollection<Message> SentMessages { get; set; } = new List<Message>();
         public ICollection<Message> ReceivedMessages { get; set; } = new List<Message>();
