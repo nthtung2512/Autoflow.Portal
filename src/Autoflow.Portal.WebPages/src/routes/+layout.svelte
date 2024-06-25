@@ -1,53 +1,47 @@
-<script>
-	import Header from './Header.svelte';
-	import './styles.css';
+<script lang='ts'>
+	import Login from './login/+page.svelte';
+	import Register from './register/+page.svelte';
+
+	import { page } from '$app/stores';
+
+	import type { PageLoad } from './$types';
+	import { authStore, setAuthState } from '../stores/authStore';
+
+	let isAuthenticated = false;
+
+
+	
+
+	// Reactive declaration: automatically subscribes to the store
+	$: isAuthenticated = $authStore.isAuthenticated;
+  
+	// Watch for changes in isAuthenticated and log a message
+	$: {
+        console.log("Check authState", isAuthenticated);
+    }
+	// export const load: PageLoad = async ({ fetch }) => {
+	// 	isAuthenticated
+		
+	// 	if (data.isAuthenticated) {
+	// 		setAuthState(true, data.user);
+	// 	} else {
+	// 		setAuthState(false, null);
+	// 	}
+		
+	// 	return {};
+	// };	
 </script>
 
 <div class="app">
-	<Header />
-
 	<main>
-		<slot />
+		{#if !isAuthenticated}
+			{#if $page.url.pathname === '/register'}
+				<Register />
+			{:else}
+				<Login />
+			{/if}
+		{:else}
+			<slot />
+		{/if}
 	</main>
-
-	<footer>
-		<p>visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to learn SvelteKit</p>
-	</footer>
 </div>
-
-<style>
-	.app {
-		display: flex;
-		flex-direction: column;
-		min-height: 100vh;
-	}
-
-	main {
-		flex: 1;
-		display: flex;
-		flex-direction: column;
-		padding: 1rem;
-		width: 100%;
-		max-width: 64rem;
-		margin: 0 auto;
-		box-sizing: border-box;
-	}
-
-	footer {
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
-		padding: 12px;
-	}
-
-	footer a {
-		font-weight: bold;
-	}
-
-	@media (min-width: 480px) {
-		footer {
-			padding: 12px 0;
-		}
-	}
-</style>

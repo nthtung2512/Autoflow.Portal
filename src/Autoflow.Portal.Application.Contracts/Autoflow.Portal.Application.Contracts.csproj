@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Autoflow.Portal.Domain\Autoflow.Portal.Domain.csproj" />
+    <ProjectReference Include="..\Autoflow.Portal.EntityFrameworkCore\Autoflow.Portal.EntityFrameworkCore.csproj" />
   </ItemGroup>
 
 </Project>

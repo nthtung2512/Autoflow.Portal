@@ -30,6 +30,12 @@ export default {
     await apiClient.delete(`/users/${userId}`)
   },
 
+  // Login API
+  async login(email: string, password: string): Promise<User> {
+    const response = await apiClient.post<User>('/login', { email, password })
+    return response.data
+  },
+
   // Messages API
   async getMessageById(messageId: string): Promise<Message> {
     const response = await apiClient.get<Message>(`/messages/${messageId}`)

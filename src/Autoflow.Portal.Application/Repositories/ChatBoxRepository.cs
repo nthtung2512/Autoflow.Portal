@@ -52,6 +52,11 @@ namespace Autoflow.Portal.Infrastructure.Repositories
 
         // Message API
 
+        public async Task<IEnumerable<Message>> GetAllMessagesAsync()
+        {
+            return await _context.Messages.ToListAsync();
+        }
+
         public async Task<Message> GetMessageByIdAsync(Guid messageId)
         {
             return await _context.Messages.FirstOrDefaultAsync(m => m.Id == messageId);
@@ -68,6 +73,16 @@ namespace Autoflow.Portal.Infrastructure.Repositories
         {
             _context.Messages.Add(message);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task DeleteMessageAsync(Guid messageId)
+        {
+            var message = await _context.Messages.FindAsync(messageId);
+            if (message != null)
+            {
+                _context.Messages.Remove(message);
+                await _context.SaveChangesAsync();
+            }
         }
 
         // Conversation API

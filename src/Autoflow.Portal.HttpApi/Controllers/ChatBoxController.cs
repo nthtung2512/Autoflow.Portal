@@ -95,6 +95,50 @@ namespace Autoflow.Portal.HttpApi.Controllers
             return NoContent(); // HTTP 204 No Content
         }
 
+        [HttpPost("login")]
+        public async Task<ActionResult<UserDTO>> Login([FromBody] UserLoginRequestDTO request)
+        {
+            if (request == null || string.IsNullOrEmpty(request.Username) || string.IsNullOrEmpty(request.Password))
+            {
+                return BadRequest("Invalid client request");
+            }
+
+            var users = await _chatBoxRepository.GetAllUsersAsync();
+
+            var user = users.FirstOrDefault(u => u.Username == request.Username && u.Password == request.Password);
+
+            if (user == null)
+            {
+                return Unauthorized(new { Message = "Invalid username or password" });
+            }
+
+            var userResponse = new UserDTO
+            {
+                Id = user.Id,
+                Username = user.Username,
+                Password = ""
+            };
+
+            // Authentication successful
+            return Ok(userResponse);
+        }
+
+        // GET api/chatbox/messages
+        [HttpGet("messages")]
+        public async Task<ActionResult<IEnumerable<MessageDTO>>> GetAllMessages()
+        {
+            var messages = await _chatBoxRepository.GetAllMessagesAsync();
+            var messagesDto = messages.Select(message => new MessageDTO
+            {
+                Id = message.Id,
+                Content = message.Content,
+                SendUserId = message.SendUserId,
+                ReceiveUserId = message.ReceiveUserId,
+                ConversationId = message.ConversationId
+            });
+            return Ok(messagesDto);
+        }
+
         // GET api/chatbox/messages/{messageId}
         [HttpGet("messages/{messageId}")]
         public async Task<ActionResult<MessageDTO>> GetMessageById(Guid messageId)
@@ -144,6 +188,18 @@ namespace Autoflow.Portal.HttpApi.Controllers
             return CreatedAtAction(nameof(GetMessageById), new { messageId = message.Id }, messageDTO);
         }
 
+        // DELETE api/chatbox/messages/{messageId}
+        [HttpDelete("messages/{messageId}")]
+        public async Task<IActionResult> DeleteMessage(Guid messageId)
+        {
+            if (await _chatBoxRepository.GetMessageByIdAsync(messageId) == null)
+            {
+                return NotFound(); // Return 404 Not Found if message with specified ID is not found
+            }
+            await _chatBoxRepository.DeleteMessageAsync(messageId);
+            return NoContent(); // HTTP 204 No Content
+        }
+
         // GET api/chatbox/conversations
         [HttpGet("conversations")]
         public async Task<ActionResult<IEnumerable<ConversationDTO>>> GetAllConversations()
@@ -185,21 +241,6 @@ namespace Autoflow.Portal.HttpApi.Controllers
 
             await _chatBoxRepository.AddConversationAsync(conversation);
             return CreatedAtAction(nameof(GetConversationById), new { conversationId = conversation.Id }, conversationDTO);
-        }
-
-        // PUT api/chatbox/conversations/{conversationId}
-        [HttpPut("conversations/{conversationId}")]
-        public async Task<IActionResult> UpdateConversation(Guid conversationId, [FromBody] ConversationDTO conversationDTO)
-        {
-            if (conversationId != conversationDTO.Id)
-            {
-                return BadRequest("Conversation ID mismatch");
-            }
-
-            var conversation = new Conversation(conversationDTO.Id);
-
-            await _chatBoxRepository.UpdateConversationAsync(conversation);
-            return NoContent(); // HTTP 204 No Content
         }
 
         // GET api/chatbox/userConversationMaps

@@ -25,9 +25,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Autoflow.Portal.HttpApi", "
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "host", "host", "{E31AC892-88EA-4676-AB9C-121D4C72564D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Autoflow.Portal.Application", "src\Autoflow.Portal.Application\Autoflow.Portal.Application.csproj", "{859EF8C0-3BAA-4BA9-86C7-A31869B39DEE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Autoflow.Portal.Application", "src\Autoflow.Portal.Application\Autoflow.Portal.Application.csproj", "{859EF8C0-3BAA-4BA9-86C7-A31869B39DEE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Autoflow.Portal.Application.Contracts", "src\Autoflow.Portal.Application.Contracts\Autoflow.Portal.Application.Contracts.csproj", "{EBC83519-474D-42FD-8E2D-13D014BE415D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Autoflow.Portal.Application.Contracts", "src\Autoflow.Portal.Application.Contracts\Autoflow.Portal.Application.Contracts.csproj", "{EBC83519-474D-42FD-8E2D-13D014BE415D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

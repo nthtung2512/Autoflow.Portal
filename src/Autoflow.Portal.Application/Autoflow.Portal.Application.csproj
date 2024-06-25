@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="7.6.2" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\base\Autoflow.Portal.Base\Autoflow.Portal.Base.csproj" />
     <ProjectReference Include="..\Autoflow.Portal.Application.Contracts\Autoflow.Portal.Application.Contracts.csproj" />
     <ProjectReference Include="..\Autoflow.Portal.EntityFrameworkCore\Autoflow.Portal.EntityFrameworkCore.csproj" />

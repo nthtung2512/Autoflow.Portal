@@ -42,6 +42,7 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@microsoft/signalr": "^8.0.0",
 		"axios": "^1.7.2",
 		"uuid": "^10.0.0"
 	}

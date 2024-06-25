@@ -41,11 +41,13 @@ builder.Services.AddCors((options) =>
     options.AddPolicy("PortalChatBox",
         new CorsPolicyBuilder()
             .WithOrigins("http://localhost:5173")
+            .WithOrigins("http://localhost:5174")
             .AllowAnyHeader()
             .AllowAnyMethod()
             .AllowCredentials()
             .Build());
 });
+
 
 
 // Build the web application

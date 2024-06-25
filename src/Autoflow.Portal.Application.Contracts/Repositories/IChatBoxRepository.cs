@@ -12,9 +12,11 @@ namespace Autoflow.Portal.Application.Contracts.Repositories
         Task DeleteUserAsync(Guid userId);
 
         // Message API
+        Task<IEnumerable<Message>> GetAllMessagesAsync();
         Task<Message> GetMessageByIdAsync(Guid messageId);
         Task<IEnumerable<Message>> GetMessagesForConversationAsync(Guid conversationId);
         Task AddMessageAsync(Message message);
+        Task DeleteMessageAsync(Guid messageId);
 
         // Conversation API
         Task<Conversation> GetConversationByIdAsync(Guid conversationId);

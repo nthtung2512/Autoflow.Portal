@@ -3,6 +3,7 @@ import type {
 	Message,
 	User,
 	UserConversationMap,
+	ErrorData
 } from '$lib/types/interfaces';
 import axios from 'axios';
 
@@ -13,13 +14,26 @@ const apiClient = axios.create({
 	}
 });
 
+const extractErrors = (errorData: ErrorData) => {
+    const errors = []
+    for (const key in errorData) {
+      if (Object.prototype.hasOwnProperty.call(errorData, key)) {
+        errors.push(...errorData[key])
+      }
+    }
+    return errors
+  }
+
 // Utility function to handle errors
 const handleError = (error: unknown): string => {
 	if (axios.isAxiosError(error)) {
+		console.log("Is Axios Error: ")
 		// Check if error has a response
-		if (error.response) {
+		if (error.response && error.response.data.errors) {
 			// Server responded with a status code other than 2xx
-			return error.response.data?.message || error.response.statusText;
+			const errors = extractErrors(error.response.data.errors)
+       	 	const stringErrors = errors.join('\n')
+			return stringErrors || error.response.statusText;
 		} else if (error.request) {
 			// Request was made but no response was received
 			return 'No response received from the server.';
@@ -53,8 +67,10 @@ export default {
 	async createUser(user: User): Promise<User | string> {
 		try {
 			const response = await apiClient.post<User>('/users', user);
+			console.log("Response: ", response.data)
 			return response.data;
 		} catch (error) {
+			console.log("Error: ", error)
 			return handleError(error);
 		}
 	},
@@ -66,8 +82,19 @@ export default {
 		}
 	},
 	async deleteUser(userId: string): Promise<void | string> {
+		console.log("Delete User: ", userId)
 		try {
 			await apiClient.delete(`/users/${userId}`);
+		} catch (error) {
+			return handleError(error);
+		}
+	},
+
+	// Login API
+	async login(username: string, password: string): Promise<User | string> {
+		try {
+			const response = await apiClient.post<User>('/login', { username, password })
+			return response.data;
 		} catch (error) {
 			return handleError(error);
 		}
@@ -87,6 +114,25 @@ export default {
 		try {
 			const response = await apiClient.get<Message[]>(`/messages/conversation/${conversationId}`);
 			return response.data;
+		} catch (error) {
+			return handleError(error);
+		}
+	},
+
+	async createMessage(message: Message): Promise<Message | string> {
+		console.log("Create Message: ", message)
+		try {
+			const response = await apiClient.post<Message>('/messages', message);
+			return response.data;
+		} catch (error) {
+			return handleError(error);
+		}
+	},
+
+	async deleteMessage(messageId: string): Promise<void | string> {
+		console.log("Delete Message: ", messageId)
+		try {
+			await apiClient.delete(`/messages/${messageId}`);
 		} catch (error) {
 			return handleError(error);
 		}
@@ -117,17 +163,7 @@ export default {
 			return handleError(error);
 		}
 	},
-	async updateConversation(
-		conversationId: string,
-		conversation: Conversation
-	): Promise<void | string> {
-		try {
-			await apiClient.put(`/conversations/${conversationId}`, conversation);
-		} catch (error) {
-			return handleError(error);
-		}
-	},
-
+	
 	// UserConversationMap API
 	async getAllUserConversationMaps(): Promise<UserConversationMap[] | string> {
 		try {
@@ -160,6 +196,7 @@ export default {
 		}
 	},
 	async addUserConversationMap(map: UserConversationMap): Promise<UserConversationMap | string> {
+		console.log("Sent map: ", map)
 		try {
 			const response = await apiClient.post<UserConversationMap>('/userConversationMaps', map);
 			return response.data;

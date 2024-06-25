@@ -51,3 +51,7 @@ export interface ApiErrorResponse {
 		};
 	};
 }
+
+export interface ErrorData {
+	[key: string]: string[];
+}
