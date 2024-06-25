@@ -8,6 +8,7 @@
 	import { authStore, setAuthState } from '../stores/authStore';
 	import { createUserStore } from '../stores/userStore';
 	import type { UUID } from 'crypto';
+	import { addUserListener } from '../services/signalrService';
 
 	export let senderUserId: UUID;
 	export let selectedReceiver;
@@ -62,8 +63,11 @@
     console.log('Check filteredReceivers', filteredReceivers);
   }
 
+   
+
 	onMount(() => {
 		usersStore.fetchUsers();
+		
 	});
 
 
@@ -115,5 +119,5 @@
 </main>
 
 {#if showNewMessageModal}
-	<NewMessageModal {senderUserId} {filteredReceivers} {closeNewMessageModal} {sendMessage}/>
+	<NewMessageModal {senderUserId} {filteredReceivers} {closeNewMessageModal} {handleSendMessage}/>
 {/if}

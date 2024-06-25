@@ -10,7 +10,7 @@
 	import FirstColumn from '../components/FirstColumn.svelte';
 	import SecondColumn from '../components/SecondColumn.svelte';
 	import { onMount, onDestroy } from 'svelte';
-    import { startSignalRConnection, stopSignalRConnection, sendMessage,  addReceiveMessageListener } from '../services/signalrService';
+    import { startSignalRConnection, stopSignalRConnection, sendMessage,  addReceiveMessageListener, deleteMessageListener, deleteMessage, postUserMessage, addUserListener } from '../services/signalrService';
 	import { createUserStore } from '../stores/userStore';
 	import { authStore } from '../stores/authStore';
 	import { createUCMapStore } from '../stores/userConversationMap';
@@ -109,8 +109,10 @@
 			selectedConversation = null;
 			return;
 		} else {
+			console.log("Watch CP1")
 			filteredUserConversationsByUId.find((uc) => {
 				if (uc.userId === user.id) {
+					console.log("Watch CP2")
 					const selectedConversationId = uc.conversationId;
 					conversationStore.fetchConversationById(selectedConversationId);
 				}
@@ -174,15 +176,6 @@
 	// 	}
 	// }
 
-
-	onMount(async () => {
-		await startSignalRConnection();
-        addReceiveMessageListener(handleReceiveMessage);
-		usersStore.fetchUsers();
-		userConversationsMap.fetchConversationMapByUserId(sender.id);
-		userConversationsMap.fetchAllUserConversationMaps();
-	});
-
 	// Get all messages by selected conversation id
     let messagesForConversation: Message[] = [];
     $: messagesStore.messagesForConversation.subscribe((maps) => {
@@ -196,10 +189,54 @@
         console.log('Check SOS', messagesStore.messagesForConversation);
     }
 
+	async function handleDeleteMessage(message: Message) {
+		// Delete message from store and db
+		await messagesStore.deleteMessage(message.id);
+		await deleteMessage(message);
+		// Delete message from local
+		messagesForConversation = messagesForConversation.filter((msg) => msg.id !== message.id);
+	}
+
+	async function handleReceiveDeleteMessage(message: Message) {
+		if (message.receiveUserId === senderUserId && message.sendUserId === selectedReceiver?.id) {
+			messagesForConversation = messagesForConversation.filter((msg) => msg.id !== message.id);
+		}
+		// else if (message.receiveUserId === senderUserId) {
+		// 	await messagesStore.getMessagesForConversationId(message.conversationId);
+		// }
+		else {
+			return;
+		}
+	}
+
+	function handleReceivePostUserMessage(user : User) {
+		users
+	}
+
+	onMount(async () => {
+		await startSignalRConnection();
+        addReceiveMessageListener(handleReceiveMessage);
+		deleteMessageListener(handleReceiveDeleteMessage);
+		addUserListener(handleReceivePostUserMessage);
+		usersStore.fetchUsers();
+		userConversationsMap.fetchConversationMapByUserId(sender.id);
+		userConversationsMap.fetchAllUserConversationMaps();
+	});
+
+	
+
 	// Handle received messages
-    function handleReceiveMessage(message: Message) {
+    async function handleReceiveMessage (message: Message) {
+		console.log('Received message: ', message);
 		if (message.receiveUserId === senderUserId && message.sendUserId === selectedReceiver?.id) {
 			messagesForConversation = [...messagesForConversation, message];
+		}
+		else if (message.receiveUserId === senderUserId) {
+			await userConversationsMap.fetchAllUserConversationMaps();
+			await userConversationsMap.fetchConversationMapByUserId(senderUserId);
+		}
+		else {
+			return;
 		}
     }
 
@@ -219,8 +256,7 @@
 				receiveUserId,
 				conversationId: newConversationId
 			};
-			await sendMessage(newMessage);
-
+			
 			const newConversation = <Conversation>{
 				id: newConversationId
 			};
@@ -234,10 +270,12 @@
 				userId: receiveUserId,
 				conversationId: newConversationId
 			};
+
 			await conversationStore.postConversation(newConversation);
 			await userConversationsMap.postUserConversationMap(newConversationMap1);
 			await userConversationsMap.postUserConversationMap(newConversationMap2);
 			await messagesStore.postMessage(newMessage);
+			await sendMessage(newMessage);
 			await conversationStore.fetchConversationById(newConversationId);
 			await userConversationsMap.fetchAllUserConversationMaps();
 			await userConversationsMap.fetchConversationMapByUserId(sendUserId);
@@ -271,5 +309,5 @@
 
 <div class="flex h-screen bg-white">
 	<FirstColumn {senderUserId} bind:selectedReceiver {receivers} {handleSendMessage} />
-	<SecondColumn {senderUserId} bind:selectedReceiver {selectedConversation} {handleSendMessage} {messagesForConversation}/>
+	<SecondColumn {senderUserId} bind:selectedReceiver {selectedConversation} {handleSendMessage} {messagesForConversation} {handleDeleteMessage}/>
 </div>

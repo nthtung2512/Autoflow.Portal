@@ -11,6 +11,16 @@ namespace Autoflow.Portal.Host.Hubs
         {
             await Clients.All.SendAsync("ReceiveMessage", messageDTO);
         }
+
+        public async Task PostUserMessage(UserDTO userDTO)
+        {
+            await Clients.All.SendAsync("ReceivePostUserMessage", userDTO);
+        }
+
+        public async Task DeleteMessage(MessageDTO messageDTO)
+        {
+            await Clients.All.SendAsync("ReceiveDeleteMessage", messageDTO);
+        }
     }
 }
 

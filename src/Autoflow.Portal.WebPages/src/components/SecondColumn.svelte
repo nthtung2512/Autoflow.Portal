@@ -4,12 +4,12 @@
     // Replace these with your actual imports
     import { createMessageStore } from '../stores/messageStore';
     import type { Conversation, Message, SecondColumnData, User } from '$lib/types/interfaces';
-    
     export let senderUserId;
     export let selectedReceiver: User | null;
     export let selectedConversation: Conversation | null;
     export let handleSendMessage;
     export let messagesForConversation: Message[];
+    export let handleDeleteMessage;
     const messagesStore = createMessageStore();
 
     // // Get all messages by selected conversation id
@@ -26,9 +26,6 @@
     // }
 
     let newMessage = '';
-    const deleteAccount = (messageId: string) => {
-      messagesStore.deleteMessage(messageId);
-    }
   </script>
 
 <div class="w-3/4">
@@ -42,7 +39,7 @@
           <div class="mt-4 mb-7 flex flex-col flex-1 gap-4 " >
             {#each messagesForConversation as message}
               <div class={message.sendUserId === senderUserId ? "flex justify-end" : "block"}>
-                <button class={message.sendUserId === senderUserId ? "block" : "hidden"} on:click={()=>deleteAccount(message.id)}>X</button>
+                <button class={message.sendUserId === senderUserId ? "block" : "hidden"} on:click={()=>handleDeleteMessage(message)}>X</button>
               <div>
                 <div
                   class="inline-block p-2 rounded-lg mb-2 max-w-3/4 w-fit"
@@ -67,6 +64,7 @@
           />
           <button
             on:click={() => handleSendMessage(senderUserId, selectedReceiver?.id, newMessage, selectedConversation?.id)}
+            on:click={() => newMessage = ''}
             disabled={newMessage.trim() === ''}
             class="bg-blue-500 text-white px-4 py-2 rounded ml-4"
           >

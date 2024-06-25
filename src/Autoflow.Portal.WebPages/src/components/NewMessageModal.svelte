@@ -5,7 +5,7 @@
 	export let senderUserId;
 	export let filteredReceivers: User[];
 	export let closeNewMessageModal: () => void;
-	export let sendMessage;
+	export let handleSendMessage;
 
 	let searchQuery = '';
 	const stateProps = filteredReceivers;
@@ -56,7 +56,7 @@
 			class="w-full p-2 border rounded mb-4"
 		></textarea>
 		<button
-			on:click={() => sendMessage(senderUserId, selectedUser?.id, message, null)}
+			on:click={() => handleSendMessage(senderUserId, selectedUser?.id, message, null)}
 			on:click={closeNewMessageModal}
 			disabled={!selectedUser || !message}
 			class="bg-blue-500 text-white px-4 py-2 rounded w-full disabled:bg-blue-200"

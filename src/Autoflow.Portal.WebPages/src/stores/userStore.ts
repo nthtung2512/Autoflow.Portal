@@ -1,7 +1,6 @@
 // src/stores/userStore.ts
 
 import { writable } from 'svelte/store';
-import { v4 as uuidv4 } from 'uuid';
 import apiService from '../services/apiService';
 import type { User } from '$lib/types/interfaces';
 import type { UUID } from 'crypto';
@@ -18,19 +17,19 @@ export function createUserStore() {
 			users.set(fetchedUsers);
 		}
 	};
-	const postUser = async (username: string, password: string): Promise<boolean> => {
-		const newUser: User = {
-			id: uuidv4() as unknown as UUID,
-			username,
-			password
-		};
+
+	// Change this to trigger reload
+	const postUser = async (newUser: User): Promise<boolean> => {
 		const response = await apiService.createUser(newUser);
 		if (typeof response === 'string') {
 			window.alert(`Error creating user: ${response}`);
 			return false;
 		} else {
 			console.log('Created user:', response);
-			users.update((users) => [...users, response]);
+			users.subscribe(currentUsers => {
+				const newUsers = [...currentUsers, response];
+				users.set(newUsers);
+			});
 			return true;
 		}
 	};

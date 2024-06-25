@@ -183,6 +183,10 @@ namespace Autoflow.Portal.HttpApi.Controllers
         [HttpPost("messages")]
         public async Task<ActionResult<MessageDTO>> CreateMessage([FromBody] MessageDTO messageDTO)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
             var message = new Message(messageDTO.Id, messageDTO.Content, messageDTO.SendUserId, messageDTO.ReceiveUserId, messageDTO.ConversationId);
             await _chatBoxRepository.AddMessageAsync(message);
             return CreatedAtAction(nameof(GetMessageById), new { messageId = message.Id }, messageDTO);

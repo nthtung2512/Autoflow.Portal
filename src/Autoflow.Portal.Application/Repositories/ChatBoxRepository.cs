@@ -17,7 +17,7 @@ namespace Autoflow.Portal.Infrastructure.Repositories
 
         // User API
 
-        public async Task<User> GetUserByIdAsync(Guid userId)
+        public async Task<User?> GetUserByIdAsync(Guid userId)
         {
             // If user not found -> return null -> handle in front end -> can ignore warning
             return await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);

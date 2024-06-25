@@ -5,7 +5,7 @@ namespace Autoflow.Portal.Application.Contracts.Repositories
     public interface IChatBoxRepository
     {
         // User API
-        Task<User> GetUserByIdAsync(Guid userId);
+        Task<User?> GetUserByIdAsync(Guid userId);
         Task<IEnumerable<User>> GetAllUsersAsync();
         Task AddUserAsync(User user);
         Task UpdateUserAsync(User user);
