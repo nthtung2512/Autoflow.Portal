@@ -55,3 +55,7 @@ export interface ApiErrorResponse {
 export interface ErrorData {
 	[key: string]: string[];
 }
+
+export interface MessageHandlerContext {
+    registerMessageHandler: (handler: (user: User) => void) => void;
+}

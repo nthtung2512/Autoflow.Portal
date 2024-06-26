@@ -6,28 +6,38 @@ import { HubConnection, HubConnectionBuilder, LogLevel } from '@microsoft/signal
 
 let hubConnection: HubConnection | null = null;
 
-// Initialize and start SignalR connection
-export const startSignalRConnection = async () => {
+const createHubConnection = () => {
+  if (!hubConnection) {
     hubConnection = new HubConnectionBuilder()
-        .withUrl('https://localhost:7198/chatHub')
-        .configureLogging(LogLevel.Information)
-        .build();
+      .withUrl('https://localhost:7198/chatHub')
+      .configureLogging(LogLevel.Information)
+      .withAutomaticReconnect()
+      .build();
 
-    try {
-        await hubConnection.start();
+    hubConnection.start()
+      .then(() => {
         console.log('SignalR Connected');
-    } catch (error) {
+      })
+      .catch(error => {
         console.error('Error starting SignalR connection: ', error);
-    }
+      });
+  }
 };
 
-// Stop SignalR connection
-export const stopSignalRConnection = async () => {
-    if (hubConnection) {
-        await hubConnection.stop();
-        console.log('SignalR Disconnected');
-    }
+export const startHubConnection = () => {
+  if (!hubConnection) createHubConnection();
 };
+
+export const stopHubConnection = async () => {
+  if (hubConnection) {
+    await hubConnection.stop();
+    console.log('SignalR Disconnected');
+    hubConnection = null;
+  }
+};
+
+// Other SignalR utilities and listeners as needed
+
 
 // Send a message using SignalR
 export const sendMessage = async (
@@ -76,7 +86,7 @@ export const postUserMessage = async (
     try {
         await hubConnection.invoke('PostUserMessage', user);
     } catch (error) {
-        console.error('Error sending message:', error);
+        throw new Error('Error sending message:' + error);
     }
 }
 

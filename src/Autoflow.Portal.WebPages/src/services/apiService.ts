@@ -8,7 +8,7 @@ import type {
 import axios from 'axios';
 
 const apiClient = axios.create({
-	baseURL: 'https://localhost:7198/api/chatbox', // Your API base URL
+	baseURL: 'https://localhost:7198/api', // Your API base URL
 	headers: {
 		'Content-Type': 'application/json'
 	}
@@ -93,7 +93,7 @@ export default {
 	// Login API
 	async login(username: string, password: string): Promise<User | string> {
 		try {
-			const response = await apiClient.post<User>('/login', { username, password })
+			const response = await apiClient.post<User>('/users/login', { username, password })
 			return response.data;
 		} catch (error) {
 			return handleError(error);

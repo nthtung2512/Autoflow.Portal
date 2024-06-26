@@ -2,15 +2,14 @@
     import { createEventDispatcher, onMount } from 'svelte';
     import "$lib/app.css"
     // Replace these with your actual imports
-    import { createMessageStore } from '../stores/messageStore';
-    import type { Conversation, Message, SecondColumnData, User } from '$lib/types/interfaces';
+    import type { Conversation, Message, User } from '$lib/types/interfaces';
     export let senderUserId;
     export let selectedReceiver: User | null;
     export let selectedConversation: Conversation | null;
     export let handleSendMessage;
     export let messagesForConversation: Message[];
     export let handleDeleteMessage;
-    const messagesStore = createMessageStore();
+    // const messagesStore = createMessageStore();
 
     // // Get all messages by selected conversation id
     // let messagesForConversation: Message[] = [];

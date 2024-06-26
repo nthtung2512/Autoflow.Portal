@@ -3,6 +3,7 @@
 import { writable } from 'svelte/store';
 import apiService from '../services/apiService'; // Adjust path to your apiService
 import type { Message } from '$lib/types/interfaces';
+import type { UUID } from 'crypto';
 
 export function createMessageStore() {
 	// Define the writable stores
@@ -22,7 +23,11 @@ export function createMessageStore() {
 	};
 
 	// Fetch all messages by conversation Id
-	const getMessagesForConversationId = async (conversationId: string): Promise<boolean> => {
+	const getMessagesForConversationId = async (conversationId: UUID | undefined): Promise<boolean> => {
+		if (conversationId === undefined) {
+			window.alert('No conversation ID provided to fetch messages.');
+			return false;
+		}
 		const fetchedMessages = await apiService.getMessagesForConversation(conversationId);
 		if (typeof fetchedMessages === 'string') {
 			window.alert(`Error fetching messages: ${fetchedMessages}`);

@@ -10,8 +10,10 @@ namespace Autoflow.Portal.Application
     {
         public override void ConfigureService(IHostApplicationBuilder builder)
         {
-            //builder.Services.AddScoped<IRunnerBotRepository, RunnerBotRepository>();
-            builder.Services.AddScoped<IChatBoxRepository, ChatBoxRepository>();
+            builder.Services.AddScoped<IUserRepository, UserRepository>();
+            builder.Services.AddScoped<IMessageRepository, MessageRepository>();
+            builder.Services.AddScoped<IConversationRepository, ConversationRepository>();
+            builder.Services.AddScoped<IUserConversationMapRepository, UserConversationMapRepository>();
         }
     }
 }

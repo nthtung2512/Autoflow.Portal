@@ -3,14 +3,9 @@
 namespace Autoflow.Portal.Domain.ChatBox
 {
     // Have column: Id
-    public class Conversation : Entity<Guid>
+    public class Conversation(Guid id) : Entity<Guid>(id)
     {
-        public ICollection<Message> Messages { get; set; } = new List<Message>();
-        public ICollection<UserConversationMap> UserConversations { get; set; } = new List<UserConversationMap>();
-
-        public Conversation(Guid id) : base(id)
-        {
-
-        }
+        public ICollection<Message> Messages { get; set; } = [];
+        public ICollection<UserConversationMap> UserConversations { get; set; } = [];
     }
 }

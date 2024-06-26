@@ -6,9 +6,10 @@
 	export let filteredReceivers: User[];
 	export let closeNewMessageModal: () => void;
 	export let handleSendMessage;
+	export let selectedReceiver;
 
 	let searchQuery = '';
-	const stateProps = filteredReceivers;
+	let stateProps = filteredReceivers;
 	let searchResults = filteredReceivers;
 
 	$: searchResults = stateProps.filter((user) =>
@@ -57,6 +58,7 @@
 		></textarea>
 		<button
 			on:click={() => handleSendMessage(senderUserId, selectedUser?.id, message, null)}
+			on:click={() => selectedReceiver = selectedUser}
 			on:click={closeNewMessageModal}
 			disabled={!selectedUser || !message}
 			class="bg-blue-500 text-white px-4 py-2 rounded w-full disabled:bg-blue-200"

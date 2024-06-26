@@ -3,6 +3,7 @@
 import { writable } from 'svelte/store';
 import type { UserConversationMap } from '$lib/types/interfaces';
 import apiService from '../services/apiService';
+import type { UUID } from 'crypto';
 
 export function createUCMapStore() {
 	  const userConversationMaps = writable<UserConversationMap[]>([]);
@@ -18,7 +19,11 @@ export function createUCMapStore() {
 	}
   };
   // Fetch user conversation map by user id
-	const fetchConversationMapByUserId = async (userId: string): Promise<boolean> => {
+	const fetchConversationMapByUserId = async (userId: UUID | undefined): Promise<boolean> => {
+		if (userId === undefined) {
+			window.alert('No user ID provided to fetch user conversation map.');
+			return false;
+		}
         console.log('fetchConversationMapByUserId:', userId);
 		const fetchedMap = await apiService.getUserConversationMapsByUserId(userId);
 		if (typeof fetchedMap === 'string') {

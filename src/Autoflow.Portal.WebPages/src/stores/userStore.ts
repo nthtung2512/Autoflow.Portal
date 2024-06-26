@@ -6,7 +6,7 @@ import type { User } from '$lib/types/interfaces';
 import type { UUID } from 'crypto';
 import { setAuthState } from './authStore';
 
-export function createUserStore() {
+function createUserStore() {
 	const users = writable<User[]>([]);
 	const fetchUsers = async () => {
 		const fetchedUsers: User[] | string = await apiService.getUsers();
@@ -26,10 +26,7 @@ export function createUserStore() {
 			return false;
 		} else {
 			console.log('Created user:', response);
-			users.subscribe(currentUsers => {
-				const newUsers = [...currentUsers, response];
-				users.set(newUsers);
-			});
+			users.update((users) => [...users, response]);
 			return true;
 		}
 	};
@@ -63,3 +60,5 @@ export function createUserStore() {
 		deleteUser
 	};
 }
+
+export const usersStore = createUserStore();

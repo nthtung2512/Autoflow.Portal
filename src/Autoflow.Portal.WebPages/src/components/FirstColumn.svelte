@@ -2,32 +2,23 @@
 <script lang="ts">
 	import '$lib/app.css';
 	import { onMount } from 'svelte';
-	import { writable, derived } from 'svelte/store';
 	import NewMessageModal from '../components/NewMessageModal.svelte';
-	import type { FirstColumnData, User } from '$lib/types/interfaces';
-	import { authStore, setAuthState } from '../stores/authStore';
-	import { createUserStore } from '../stores/userStore';
+	import type { User } from '$lib/types/interfaces';
+	import { setAuthState } from '../stores/authStore';
 	import type { UUID } from 'crypto';
-	import { addUserListener } from '../services/signalrService';
-
-	export let senderUserId: UUID;
-	export let selectedReceiver;
+	import { usersStore } from '../stores/userStore';
+	export let senderUserId: UUID | undefined;
+	export let selectedReceiver: User | null;
 	export let receivers: User[];
 	export let handleSendMessage;
 
-  $: {
-    console.log("PROPS receiver", receivers)
-  }
-
-	const usersStore = createUserStore();
-
-	// Get all users
 	let users: User[] = [];
-	$: usersStore.users.subscribe((maps) => {
+	usersStore.users.subscribe((maps: User[]) => {
 		users = maps;
 	});
+
 	$: {
-		console.log('Check users', users);
+		console.log('PROPS receiver', receivers);
 	}
 
 	let showNewMessageModal = false;
@@ -40,16 +31,13 @@
 	function closeNewMessageModal() {
 		showNewMessageModal = false;
 	}
-  
+
 	$: searchResults = receivers.filter((user) =>
 		user.username.toLowerCase().includes(searchQuery.toLowerCase())
 	);
-  $: {
-    console.log('Check searchResults', searchResults);
-  }
-	function selectReceiver(receiver: User) {
-		selectedReceiver = receiver;
-	};
+	$: {
+		console.log('Check searchResults', searchResults);
+	}
 
 	const logout = () => {
 		setAuthState(false, null);
@@ -57,26 +45,20 @@
 
 	// Filter user that is not the sender and not alreay sent message
 	$: filteredReceivers = users.filter(
-    (user) => user.id !== senderUserId && !receivers.some((receiver) => receiver.id === user.id)
-  );
-  $: {
-    console.log('Check filteredReceivers', filteredReceivers);
-  }
-
-   
+		(user) => user.id !== senderUserId && !receivers.some((receiver) => receiver.id === user.id)
+	);
+	$: {
+		console.log('Check filteredReceivers', filteredReceivers);
+	}
 
 	onMount(() => {
 		usersStore.fetchUsers();
-		
 	});
 
-
 	async function deleteAccount() {
-		await usersStore.deleteUser(senderUserId);
+		// await usersStore.deleteUser(senderUserId);
 		logout();
-		
 	}
-	
 </script>
 
 <main class="w-1/4 border-r border-gray-200 p-4 overflow-auto">
@@ -107,7 +89,7 @@
 		{#if searchResults.length > 0}
 			<ul class="flex flex-col w-fit items-start">
 				{#each searchResults as result (result.id)}
-					<button on:click={() => selectReceiver(result)} class="mb-2 cursor-pointer">
+					<button on:click={() => (selectedReceiver = result)} class="mb-2 cursor-pointer">
 						{result.username}
 					</button>
 				{/each}
@@ -119,5 +101,11 @@
 </main>
 
 {#if showNewMessageModal}
-	<NewMessageModal {senderUserId} {filteredReceivers} {closeNewMessageModal} {handleSendMessage}/>
+	<NewMessageModal
+		{senderUserId}
+		{filteredReceivers}
+		{closeNewMessageModal}
+		{handleSendMessage}
+		bind:selectedReceiver
+	/>
 {/if}

@@ -12,5 +12,6 @@
 
 	<ItemGroup>
 	  <ProjectReference Include="..\Autoflow.Portal.Application.Contracts\Autoflow.Portal.Application.Contracts.csproj" />
+	  <ProjectReference Include="..\Autoflow.Portal.Application\Autoflow.Portal.Application.csproj" />
 	</ItemGroup>
 </Project>

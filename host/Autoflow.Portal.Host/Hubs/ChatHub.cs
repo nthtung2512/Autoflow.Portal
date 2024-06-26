@@ -9,6 +9,7 @@ namespace Autoflow.Portal.Host.Hubs
         // When SendMessage is called by client A, message is sent to all client 
         public async Task SendMessage(MessageDTO messageDTO)
         {
+            //string name = Context.User.Identity.Name;
             await Clients.All.SendAsync("ReceiveMessage", messageDTO);
         }
 

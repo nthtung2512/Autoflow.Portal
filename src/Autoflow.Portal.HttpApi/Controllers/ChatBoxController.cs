@@ -62,7 +62,7 @@ namespace Autoflow.Portal.HttpApi.Controllers
                 return BadRequest(ModelState);
             }
 
-            var user = new User(userDTO.Id, userDTO.Username, userDTO.Password);
+            var user = new User(userDTO.Id) { Username = userDTO.Username, Password = userDTO.Password };
 
             await _chatBoxRepository.AddUserAsync(user);
             return CreatedAtAction(nameof(GetUserById), new { userId = user.Id }, userDTO);
@@ -77,7 +77,7 @@ namespace Autoflow.Portal.HttpApi.Controllers
                 return BadRequest("User ID mismatch");
             }
 
-            var user = new User(userDTO.Id, userDTO.Username, userDTO.Password);
+            var user = new User(userDTO.Id) { Username = userDTO.Username, Password = userDTO.Password };
 
             await _chatBoxRepository.UpdateUserAsync(user);
             return NoContent(); // HTTP 204 No Content
@@ -187,7 +187,7 @@ namespace Autoflow.Portal.HttpApi.Controllers
             {
                 return BadRequest(ModelState);
             }
-            var message = new Message(messageDTO.Id, messageDTO.Content, messageDTO.SendUserId, messageDTO.ReceiveUserId, messageDTO.ConversationId);
+            var message = new Message(messageDTO.Id) { Content = messageDTO.Content, SendUserId = messageDTO.SendUserId, ReceiveUserId = messageDTO.ReceiveUserId, ConversationId = messageDTO.ConversationId };
             await _chatBoxRepository.AddMessageAsync(message);
             return CreatedAtAction(nameof(GetMessageById), new { messageId = message.Id }, messageDTO);
         }
@@ -291,13 +291,9 @@ namespace Autoflow.Portal.HttpApi.Controllers
         [HttpPost("userConversationMaps")]
         public async Task<ActionResult<UserConversationMap>> AddUserConversationMap([FromBody] UserConversationMapDTO userConversationMapDTO)
         {
-            var userConversationMap = new UserConversationMap
-            {
-                UserId = userConversationMapDTO.UserId,
-                ConversationId = userConversationMapDTO.ConversationId
-            };
+            var userConversationMap = new UserConversationMap(userConversationMapDTO.UserId, userConversationMapDTO.ConversationId);
             await _chatBoxRepository.AddUserConversationMapAsync(userConversationMap);
-            return CreatedAtAction(nameof(GetAllUserConversationMaps), userConversationMap);
+            return CreatedAtAction(nameof(GetAllUserConversationMaps), userConversationMapDTO);
         }
 
         // Additional endpoints for messages and other functionalities can be added similarly

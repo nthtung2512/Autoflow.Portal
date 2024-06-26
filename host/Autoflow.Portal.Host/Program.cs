@@ -36,6 +36,43 @@ builder.Services.AddSwaggerGen();           // Add services required to generate
 // Register custom modules with the DI container
 builder.AddModules<AutoflowPortalApiModule>();
 
+
+// Set Up Authentication for cookies and JWT tokens
+//builder.Services.AddAuthentication(options =>
+//{
+//    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+//    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+//})
+//.AddJwtBearer(options =>
+//{
+//    options.TokenValidationParameters = new TokenValidationParameters
+//    {
+//        ValidateIssuer = true,
+//        ValidateAudience = true,
+//        ValidateLifetime = true,
+//        ValidateIssuerSigningKey = true,
+//        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+//        ValidAudience = builder.Configuration["Jwt:Audience"],
+//        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+//    };
+//    options.Events = new JwtBearerEvents
+//    {
+//        OnMessageReceived = context =>
+//        {
+//            var accessToken = context.Request.Query["access_token"];
+
+//            // If the request is for our hub...
+//            var path = context.HttpContext.Request.Path;
+//            if (!string.IsNullOrEmpty(accessToken) && (path.StartsWithSegments("/chatHub")))
+//            {
+//                context.Token = accessToken;
+//            }
+//            return Task.CompletedTask;
+//        }
+//    };
+//});
+
+
 builder.Services.AddCors((options) =>
 {
     options.AddPolicy("PortalChatBox",
@@ -47,7 +84,6 @@ builder.Services.AddCors((options) =>
             .AllowCredentials()
             .Build());
 });
-
 
 
 // Build the web application
@@ -64,11 +100,11 @@ if (app.Environment.IsDevelopment()) // Check if the app is running in the Devel
 app.UseHttpsRedirection();
 
 // Adds middleware to handle authorization checks for incoming requests.
+//app.UseAuthentication();
 app.UseAuthorization();
 
 app.UseCors("PortalChatBox");
 app.MapHub<ChatHub>("/chatHub");
-
 // Maps controller endpoints to the request pipeline, setting up routes to handle incoming HTTP requests.
 app.MapControllers();
 
