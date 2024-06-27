@@ -40,6 +40,8 @@
 	}
 
 	const logout = () => {
+		localStorage.removeItem('jwtToken');
+    	localStorage.removeItem('user');
 		setAuthState(false, null);
 	};
 

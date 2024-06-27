@@ -1,5 +1,6 @@
 ﻿using Autoflow.Portal.Domain.ChatBoxDTOs;
 using Microsoft.AspNetCore.SignalR;
+using System.Security.Claims;
 
 namespace Autoflow.Portal.Host.Hubs
 {
@@ -9,7 +10,8 @@ namespace Autoflow.Portal.Host.Hubs
         // When SendMessage is called by client A, message is sent to all client 
         public async Task SendMessage(MessageDTO messageDTO)
         {
-            //string name = Context.User.Identity.Name;
+            var userIdClaim = Context.User?.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.NameIdentifier)?.Value;
+            string name = Context.User.Identity.Name;
             await Clients.All.SendAsync("ReceiveMessage", messageDTO);
         }
 

@@ -9,7 +9,9 @@ let hubConnection: HubConnection | null = null;
 const createHubConnection = () => {
   if (!hubConnection) {
     hubConnection = new HubConnectionBuilder()
-      .withUrl('https://localhost:7198/chatHub')
+      .withUrl('https://localhost:7198/chatHub', {
+        accessTokenFactory: () => localStorage.getItem('jwtToken') || 'abc'
+    })
       .configureLogging(LogLevel.Information)
       .withAutomaticReconnect()
       .build();

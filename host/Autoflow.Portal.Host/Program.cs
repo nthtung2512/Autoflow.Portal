@@ -1,9 +1,12 @@
 using Autoflow.Portal.Base;
 using Autoflow.Portal.Host;
 using Autoflow.Portal.Host.Hubs;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Cors.Infrastructure;
+using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using Serilog.Events;
+using System.Text;
 
 #region LoggerConfiguration
 Log.Logger = new LoggerConfiguration()
@@ -37,40 +40,43 @@ builder.Services.AddSwaggerGen();           // Add services required to generate
 builder.AddModules<AutoflowPortalApiModule>();
 
 
-// Set Up Authentication for cookies and JWT tokens
-//builder.Services.AddAuthentication(options =>
-//{
-//    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-//    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-//})
-//.AddJwtBearer(options =>
-//{
-//    options.TokenValidationParameters = new TokenValidationParameters
-//    {
-//        ValidateIssuer = true,
-//        ValidateAudience = true,
-//        ValidateLifetime = true,
-//        ValidateIssuerSigningKey = true,
-//        ValidIssuer = builder.Configuration["Jwt:Issuer"],
-//        ValidAudience = builder.Configuration["Jwt:Audience"],
-//        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
-//    };
-//    options.Events = new JwtBearerEvents
-//    {
-//        OnMessageReceived = context =>
-//        {
-//            var accessToken = context.Request.Query["access_token"];
+//Set Up Authentication for cookies and JWT tokens
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+        ValidAudience = builder.Configuration["Jwt:Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+    };
+    options.Events = new JwtBearerEvents
+    {
+        OnMessageReceived = context =>
+        {
+            var accessToken = context.Request.Query["access_token"];
 
-//            // If the request is for our hub...
-//            var path = context.HttpContext.Request.Path;
-//            if (!string.IsNullOrEmpty(accessToken) && (path.StartsWithSegments("/chatHub")))
-//            {
-//                context.Token = accessToken;
-//            }
-//            return Task.CompletedTask;
-//        }
-//    };
-//});
+            // If the request is for our hub...
+            var path = context.HttpContext.Request.Path;
+            if (!string.IsNullOrEmpty(accessToken) && (path.StartsWithSegments("/chatHub")))
+            {
+                context.Token = accessToken;
+            }
+            return Task.CompletedTask;
+        }
+    };
+});
+
+builder.Services.AddAuthorization();
 
 
 builder.Services.AddCors((options) =>
@@ -78,7 +84,6 @@ builder.Services.AddCors((options) =>
     options.AddPolicy("PortalChatBox",
         new CorsPolicyBuilder()
             .WithOrigins("http://localhost:5173")
-            .WithOrigins("http://localhost:5174")
             .AllowAnyHeader()
             .AllowAnyMethod()
             .AllowCredentials()
@@ -100,7 +105,7 @@ if (app.Environment.IsDevelopment()) // Check if the app is running in the Devel
 app.UseHttpsRedirection();
 
 // Adds middleware to handle authorization checks for incoming requests.
-//app.UseAuthentication();
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.UseCors("PortalChatBox");

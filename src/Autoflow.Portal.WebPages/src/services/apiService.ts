@@ -5,14 +5,34 @@ import type {
 	UserConversationMap,
 	ErrorData
 } from '$lib/types/interfaces';
+import { goto } from '$app/navigation';
 import axios from 'axios';
-
+import { setAuthState } from '../stores/authStore';
 const apiClient = axios.create({
 	baseURL: 'https://localhost:7198/api', // Your API base URL
 	headers: {
 		'Content-Type': 'application/json'
 	}
 });
+
+// Add a request interceptor to include the token
+apiClient.interceptors.request.use(
+    config => {
+        const token = localStorage.getItem('jwtToken');
+        if (token) {
+            config.headers.Authorization = `Bearer ${token}`;
+        }
+        return config;
+    },
+    error => {
+        return Promise.reject(error);
+    }
+);
+
+function isTokenExpired(token: string): boolean {
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    return payload.exp * 1000 < Date.now();
+}
 
 const extractErrors = (errorData: ErrorData) => {
     const errors = []
@@ -47,6 +67,20 @@ const handleError = (error: unknown): string => {
 
 // API Service with CRUD operations
 export default {
+	async ensureAuthenticated() {
+		const token = localStorage.getItem('jwtToken');
+		if (token && !isTokenExpired(token)) {
+			// When token available
+			setAuthState(true, JSON.parse(localStorage.getItem('user') || '{}'));
+			goto("/")
+		}
+		else {
+			// Token is not available or expired, redirect to login
+			localStorage.removeItem('jwtToken'); // Clear the invalid token
+			goto("/login");
+		}
+	},
+	
 	// Users API
 	async getUsers(): Promise<User[] | string> {
 		try {
@@ -93,8 +127,17 @@ export default {
 	// Login API
 	async login(username: string, password: string): Promise<User | string> {
 		try {
-			const response = await apiClient.post<User>('/users/login', { username, password })
-			return response.data;
+			const response = await apiClient.post<{ token: string, user: User }>('/login', { username, password });
+			const token = response.data.token;
+			console.log("login return data", response.data);
+	
+			// Save the token in local storage
+			localStorage.setItem('jwtToken', token);
+	
+			// Optionally, save user data if needed
+			localStorage.setItem('user', JSON.stringify(response.data.user));
+	
+			return response.data.user;
 		} catch (error) {
 			return handleError(error);
 		}
