@@ -5,7 +5,7 @@
 		Conversation,
 		FirstColumnData,
 		SecondColumnData,
-		UserConversationMap,
+		UserConversationMap
 	} from '$lib/types/interfaces';
 	import FirstColumn from '../components/FirstColumn.svelte';
 	import SecondColumn from '../components/SecondColumn.svelte';
@@ -17,7 +17,9 @@
 		sendMessage,
 		deleteMessage,
 		deleteMessageListener,
-		addUserListener
+		addUserListener,
+		joinConversation,
+		leaveConversation
 	} from '../services/signalrService';
 	import { usersStore } from '../stores/userStore';
 	import { authStore } from '../stores/authStore';
@@ -107,7 +109,10 @@
 	}
 
 	// When receiver selected, choose the conversation
-	function watchSelectedReceiver(user: User | null) {
+	async function watchSelectedReceiver(user: User | null) {
+		if (selectedConversation) {
+			await leaveConversation(selectedConversation.id.toString());
+		}
 		if (user === null) {
 			selectedConversation = null;
 			return;
@@ -119,6 +124,7 @@
 					const selectedConversationId = uc.conversationId;
 					// Update new conversation based on selected receiver
 					conversationStore.fetchConversationById(selectedConversationId);
+					joinConversation(selectedConversationId.toString());
 				}
 			});
 		}
@@ -238,7 +244,7 @@
 			// await userConversationsMap.fetchAllUserConversationMaps();
 			await userConversationsMap.fetchConversationMapByUserId(sendUserId);
 			let temp = users.find((user) => user.id === receiveUserId);
-			if (temp){
+			if (temp) {
 				selectedReceiver = temp;
 			}
 			selectedConversation = newConversation;
@@ -250,7 +256,7 @@
 				receiveUserId,
 				conversationId
 			};
-			
+
 			await messagesStore.postMessage(newMessage);
 			await sendMessage(newMessage);
 			selectedConversation = selectedConversation;
@@ -269,7 +275,7 @@
 </svelte:head>
 
 <div class="flex h-screen bg-white">
-	<FirstColumn {senderUserId} bind:selectedReceiver {receivers} {handleSendMessage}/>
+	<FirstColumn {senderUserId} bind:selectedReceiver {receivers} {handleSendMessage} />
 	<SecondColumn
 		{senderUserId}
 		bind:selectedReceiver

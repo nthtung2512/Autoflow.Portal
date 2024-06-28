@@ -32,7 +32,7 @@
       <div class="relative w-full box-border h-screen p-10 flex flex-col ">
         <div class="flex gap-10">
           <h2 class="text-2xl font-semibold">{selectedReceiver?.username}</h2>
-          <button on:click={() => selectedReceiver = null} on:click={() => selectedConversation = null} class="text-blue-500">Close</button>
+          <button on:click={() => selectedReceiver = null} class="text-blue-500">Close</button>
         </div>
         <div class="flex flex-col-reverse overflow-auto h-[800px]">
           <div class="mt-4 mb-7 flex flex-col flex-1 gap-4 " >

@@ -2,6 +2,7 @@
 {
     public class ConnectionMapping<T>
     {
+        // Map conversation to set of ConnectionId
         private readonly Dictionary<T, HashSet<string>> _connections =
             new Dictionary<T, HashSet<string>>();
 

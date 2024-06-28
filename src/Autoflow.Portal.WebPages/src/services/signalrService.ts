@@ -9,16 +9,14 @@ let hubConnection: HubConnection | null = null;
 const createHubConnection = () => {
   if (!hubConnection) {
     hubConnection = new HubConnectionBuilder()
-      .withUrl('https://localhost:7198/chatHub', {
-        accessTokenFactory: () => localStorage.getItem('jwtToken') || 'abc'
-    })
+      .withUrl('https://localhost:7198/chatHub')
       .configureLogging(LogLevel.Information)
       .withAutomaticReconnect()
       .build();
 
     hubConnection.start()
       .then(() => {
-        console.log('SignalR Connected');
+        console.log('SignalR Connected with connection', hubConnection?.connectionId);
       })
       .catch(error => {
         console.error('Error starting SignalR connection: ', error);
@@ -39,6 +37,30 @@ export const stopHubConnection = async () => {
 };
 
 // Other SignalR utilities and listeners as needed
+
+export const joinConversation = async (conversationId: string) => {
+    if (!hubConnection) {
+        throw new Error('SignalR connection is not established.');
+    }
+    
+    try {
+        await hubConnection.invoke('JoinConversation', conversationId);
+    } catch (error) {
+        console.error('Error joining conversation:', error);
+    }
+};
+
+export const leaveConversation = async (conversationId: string) => {
+    if (!hubConnection) {
+        throw new Error('SignalR connection is not established.');
+    }
+
+    try {
+        await hubConnection.invoke('LeaveConversation', conversationId);
+    } catch (error) {
+        console.error('Error leaving conversation:', error);
+    }
+};
 
 
 // Send a message using SignalR
