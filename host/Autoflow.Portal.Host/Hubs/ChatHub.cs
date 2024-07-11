@@ -60,6 +60,11 @@ namespace Autoflow.Portal.Host.Hubs
             }
         }
 
+        public async Task SendSimpleMessage(string message)
+        {
+            await Clients.All.SendAsync("ReceiveSimpleMessage", message);
+        }
+
         public async Task DeleteMessage(MessageDTO messageDTO)
         {
             var connections = _connections.GetConnections(messageDTO.ConversationId.ToString());

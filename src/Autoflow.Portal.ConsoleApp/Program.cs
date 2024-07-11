@@ -1,6 +1,7 @@
 ﻿using Autoflow.Portal.Auth.Configurations;
 using Autoflow.Portal.ConsoleApp;
 using Autoflow.Portal.Domain.Shared;
+using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using OpenIddict.Client;
@@ -12,7 +13,6 @@ var config = new ConfigurationBuilder()
 
 // Read the client info from configuration
 var clientInfo = config.GetSection("ClientConfiguration:AuthenticationEndpoint").Get<AuthenticationEndPoint>();
-
 
 
 var services = new ServiceCollection();
@@ -56,6 +56,25 @@ Console.WriteLine();
 var organizationName = await provider.GetOrganizationNameAsync(token);
 var fullClientInfo = await provider.GetClientAsync<ClientInfo>(token);
 
+var hubUrl = "https://localhost:7198/chatHub";
+HubConnection hubConnection = null;
+var organizationMessages = new List<string>();
+
+if (fullClientInfo.Role == "User")
+{
+    hubConnection = new HubConnectionBuilder()
+            .WithUrl(hubUrl)
+            .Build();
+
+    // Set up listeners for SignalR messages
+    hubConnection.On<string>("ReceiveSimpleMessage", (message) =>
+    {
+        organizationMessages.Add(message);
+    });
+
+    await hubConnection.StartAsync();
+}
+
 
 while (true)
 {
@@ -74,8 +93,28 @@ while (true)
     switch (choice)
     {
         case "1":
-            await provider.SendMessageOption(fullClientInfo, organizationName, token);
-            break;
+            // Initialize the messages list from the server
+            organizationMessages = await provider.GetMessageAsync(token);
+            while (true)
+            {
+                provider.PrintOrganizationMessages(organizationMessages, fullClientInfo, organizationName);
+
+                Console.Write("Send message (Press q or Q to quit): ");
+                var message = Console.ReadLine();
+
+                if (message.Equals("q", StringComparison.OrdinalIgnoreCase))
+                {
+                    Console.WriteLine("Exiting the application.");
+                    Environment.Exit(0);
+                }
+
+                await provider.SendMessageAsync(token, message);
+
+                // Send the message to the server via SignalR
+                await hubConnection.InvokeAsync("SendSimpleMessage", message);
+                // Wait for a moment to allow the message to be processed
+                await Task.Delay(1000); // Adjust the delay as necessary
+            }
         case "2":
             await provider.AddOrganizationOption(token, fullClientInfo);
             break;
@@ -84,3 +123,4 @@ while (true)
             break;
     }
 }
+

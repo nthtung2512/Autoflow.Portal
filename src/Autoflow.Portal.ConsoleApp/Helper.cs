@@ -124,28 +124,5 @@ namespace Autoflow.Portal.ConsoleApp
             }
             Console.WriteLine();
         }
-
-        public static async Task SendMessageOption(this ServiceProvider provider, ClientInfo fullClientInfo, string organizationName, string token)
-        {
-            var organizationMessages = await provider.GetMessageAsync(token);
-
-            while (true)
-            {
-                provider.PrintOrganizationMessages(organizationMessages, fullClientInfo, organizationName);
-
-                Console.Write("Send message (Press q or Q to quit): ");
-                var message = Console.ReadLine();
-
-                if (message.Equals("q", StringComparison.OrdinalIgnoreCase))
-                {
-                    Console.WriteLine("Exiting the application.");
-                    Environment.Exit(0);
-                }
-
-                await provider.SendMessageAsync(token, message);
-
-                organizationMessages = await provider.GetMessageAsync(token);
-            }
-        }
     }
 }

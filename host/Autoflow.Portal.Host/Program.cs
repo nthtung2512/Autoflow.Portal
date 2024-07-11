@@ -1,4 +1,5 @@
 using Autoflow.Portal.Base;
+using Autoflow.Portal.EntityFrameworkCore;
 using Autoflow.Portal.Host;
 using Autoflow.Portal.Host.Hubs;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -38,7 +39,7 @@ builder.Services.AddSwaggerGen();           // Add services required to generate
 
 // Register custom modules with the DI container
 builder.AddModules<AutoflowPortalApiModule>();
-
+builder.Services.AddTransient<Seed>();
 
 //Set Up Authentication for cookies and JWT tokens
 builder.Services.AddAuthentication(options =>
@@ -99,6 +100,9 @@ if (app.Environment.IsDevelopment()) // Check if the app is running in the Devel
 {
     app.UseSwagger();    // Enable middleware to serve generated Swagger as a JSON endpoint
     app.UseSwaggerUI();  // Enable middleware to serve the Swagger UI
+
+    using var scope = app.Services.CreateScope();
+    scope.ServiceProvider.GetRequiredService<Seed>().Populate();
 }
 
 // Enable middleware to redirect HTTP requests to HTTPS

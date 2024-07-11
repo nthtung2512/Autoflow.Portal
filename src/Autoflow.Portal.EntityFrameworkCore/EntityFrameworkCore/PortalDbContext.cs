@@ -14,6 +14,7 @@ namespace Autoflow.Portal.EntityFrameworkCore.EntityFrameworkCore
         public DbSet<UserConversationMap> UserConversationMaps { get; set; }
         public DbSet<Organization> Organizations { get; set; }
         public DbSet<ClientInfo> ClientInfos { get; set; }
+        public DbSet<OMessage> OMessages { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -104,6 +105,12 @@ namespace Autoflow.Portal.EntityFrameworkCore.EntityFrameworkCore
             {
                 b.ToTable(PortalConst.DbTablePrefix + "client_infos", PortalConst.DbSchema);
                 b.HasKey(c => c.ClientId);
+            });
+
+            builder.Entity<OMessage>(b =>
+            {
+                b.ToTable(PortalConst.DbTablePrefix + "omessages", PortalConst.DbSchema);
+                b.HasKey(c => c.Id);
             });
         }
     }

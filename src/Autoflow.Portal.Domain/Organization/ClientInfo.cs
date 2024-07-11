@@ -6,6 +6,6 @@
         public Guid ClientSecret { get; set; }
         public string DisplayName { get; set; } = string.Empty;
         public string Role { get; set; } = string.Empty;
-        public Guid OrganizationId { get; set; }
+        public Guid? OrganizationId { get; set; }
     }
 }
