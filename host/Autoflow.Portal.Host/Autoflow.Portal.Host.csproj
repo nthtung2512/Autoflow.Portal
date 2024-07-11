@@ -20,6 +20,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\base\Autoflow.Portal.Base\Autoflow.Portal.Base.csproj" />
     <ProjectReference Include="..\..\src\Autoflow.Portal.Application\Autoflow.Portal.Application.csproj" />
+    <ProjectReference Include="..\..\src\Autoflow.Portal.Auth\Autoflow.Portal.Auth.csproj" />
     <ProjectReference Include="..\..\src\Autoflow.Portal.EntityFrameworkCore\Autoflow.Portal.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\..\src\Autoflow.Portal.HttpApi\Autoflow.Portal.HttpApi.csproj" />
   </ItemGroup>

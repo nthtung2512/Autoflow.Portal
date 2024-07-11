@@ -12,8 +12,10 @@ namespace Autoflow.Portal.EntityFrameworkCore
         public override void ConfigureService(IHostApplicationBuilder builder)
         {
             builder.Services.AddDbContext<PortalDbContext>(options =>
-                options.UseNpgsql(builder.Configuration.GetConnectionString("Default")
-            ));
+            {
+                options.UseNpgsql(builder.Configuration.GetConnectionString("Default"));
+                options.UseOpenIddict();
+            });
         }
     }
 }

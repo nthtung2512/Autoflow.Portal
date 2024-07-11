@@ -1,4 +1,5 @@
 ﻿using Autoflow.Portal.Application.Contracts.Repositories;
+using Autoflow.Portal.Application.Repositories;
 using Autoflow.Portal.Base;
 using Autoflow.Portal.Infrastructure.Repositories;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,6 +15,8 @@ namespace Autoflow.Portal.Application
             builder.Services.AddScoped<IMessageRepository, MessageRepository>();
             builder.Services.AddScoped<IConversationRepository, ConversationRepository>();
             builder.Services.AddScoped<IUserConversationMapRepository, UserConversationMapRepository>();
+            builder.Services.AddScoped<IOrganizationRepository, OrganizationRepository>();
+            builder.Services.AddScoped<IClientInfoRepository, ClientInfoRepository>();
         }
     }
 }

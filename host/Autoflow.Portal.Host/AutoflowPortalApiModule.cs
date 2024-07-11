@@ -1,4 +1,5 @@
 ﻿using Autoflow.Portal.Application;
+using Autoflow.Portal.Auth;
 using Autoflow.Portal.Base;
 using Autoflow.Portal.EntityFrameworkCore;
 
@@ -8,7 +9,8 @@ namespace Autoflow.Portal.Host
     {
         private readonly Module[] DependentType = [
             new PortalApplicationModule(),
-            new PortalEntityFrameworkCoreModule()
+            new PortalAuthModule(),
+            new PortalEntityFrameworkCoreModule(),
         ];
 
         public override void ConfigureService(IHostApplicationBuilder builder)

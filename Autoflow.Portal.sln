@@ -29,6 +29,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Autoflow.Portal.Application
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Autoflow.Portal.Application.Contracts", "src\Autoflow.Portal.Application.Contracts\Autoflow.Portal.Application.Contracts.csproj", "{EBC83519-474D-42FD-8E2D-13D014BE415D}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Autoflow.Portal.ConsoleApp", "src\Autoflow.Portal.ConsoleApp\Autoflow.Portal.ConsoleApp.csproj", "{1BA53315-6B27-4603-AA15-DE82AB0236DE}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Autoflow.Portal.Auth", "src\Autoflow.Portal.Auth\Autoflow.Portal.Auth.csproj", "{A6FBA6A0-4BF5-4F6B-9990-F771D0662B86}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -71,6 +75,14 @@ Global
 		{EBC83519-474D-42FD-8E2D-13D014BE415D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EBC83519-474D-42FD-8E2D-13D014BE415D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EBC83519-474D-42FD-8E2D-13D014BE415D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1BA53315-6B27-4603-AA15-DE82AB0236DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1BA53315-6B27-4603-AA15-DE82AB0236DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1BA53315-6B27-4603-AA15-DE82AB0236DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1BA53315-6B27-4603-AA15-DE82AB0236DE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A6FBA6A0-4BF5-4F6B-9990-F771D0662B86}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A6FBA6A0-4BF5-4F6B-9990-F771D0662B86}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A6FBA6A0-4BF5-4F6B-9990-F771D0662B86}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A6FBA6A0-4BF5-4F6B-9990-F771D0662B86}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -85,6 +97,8 @@ Global
 		{48C9EEFD-07FC-418D-B20F-B77A357001BE} = {BBE2D485-EB18-45A4-9C8E-756F1061D953}
 		{859EF8C0-3BAA-4BA9-86C7-A31869B39DEE} = {BBE2D485-EB18-45A4-9C8E-756F1061D953}
 		{EBC83519-474D-42FD-8E2D-13D014BE415D} = {BBE2D485-EB18-45A4-9C8E-756F1061D953}
+		{1BA53315-6B27-4603-AA15-DE82AB0236DE} = {BBE2D485-EB18-45A4-9C8E-756F1061D953}
+		{A6FBA6A0-4BF5-4F6B-9990-F771D0662B86} = {BBE2D485-EB18-45A4-9C8E-756F1061D953}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {59B06982-AA48-4108-9C37-5CD67FBEFAB1}

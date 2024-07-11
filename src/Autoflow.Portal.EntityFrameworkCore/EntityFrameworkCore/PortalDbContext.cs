@@ -1,5 +1,7 @@
 ﻿using Autoflow.Portal.Domain;
 using Autoflow.Portal.Domain.ChatBox;
+using Autoflow.Portal.Domain.Organization;
+using Autoflow.Portal.Domain.Shared;
 using Microsoft.EntityFrameworkCore;
 
 namespace Autoflow.Portal.EntityFrameworkCore.EntityFrameworkCore
@@ -10,6 +12,8 @@ namespace Autoflow.Portal.EntityFrameworkCore.EntityFrameworkCore
         public DbSet<Conversation> Conversations { get; set; }
         public DbSet<Message> Messages { get; set; }
         public DbSet<UserConversationMap> UserConversationMaps { get; set; }
+        public DbSet<Organization> Organizations { get; set; }
+        public DbSet<ClientInfo> ClientInfos { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -19,7 +23,7 @@ namespace Autoflow.Portal.EntityFrameworkCore.EntityFrameworkCore
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-
+            builder.UseOpenIddict();
             // Configuring User
             builder.Entity<User>(b =>
             {
@@ -89,6 +93,17 @@ namespace Autoflow.Portal.EntityFrameworkCore.EntityFrameworkCore
                 b.HasOne(uc => uc.Conversation)
                  .WithMany(c => c.UserConversations)
                  .HasForeignKey(uc => uc.ConversationId);
+            });
+            builder.Entity<Organization>(b =>
+            {
+                b.ToTable(PortalConst.DbTablePrefix + "organizations", PortalConst.DbSchema);
+                b.HasKey(o => o.Id);
+            });
+
+            builder.Entity<ClientInfo>(b =>
+            {
+                b.ToTable(PortalConst.DbTablePrefix + "client_infos", PortalConst.DbSchema);
+                b.HasKey(c => c.ClientId);
             });
         }
     }

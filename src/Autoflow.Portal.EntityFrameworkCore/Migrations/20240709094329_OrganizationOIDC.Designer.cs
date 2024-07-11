@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Autoflow.Portal.EntityFrameworkCore.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -12,9 +13,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Autoflow.Portal.EntityFrameworkCore.Migrations
 {
     [DbContext(typeof(PortalDbContext))]
-    partial class PortalDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240709094329_OrganizationOIDC")]
+    partial class OrganizationOIDC
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -124,30 +127,6 @@ namespace Autoflow.Portal.EntityFrameworkCore.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("organizations", (string)null);
-                });
-
-            modelBuilder.Entity("Autoflow.Portal.Domain.Shared.ClientInfo", b =>
-                {
-                    b.Property<string>("ClientId")
-                        .HasColumnType("text");
-
-                    b.Property<Guid>("ClientSecret")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("DisplayName")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<Guid>("OrganizationId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Role")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("ClientId");
-
-                    b.ToTable("client_infos", (string)null);
                 });
 
             modelBuilder.Entity("OpenIddict.EntityFrameworkCore.Models.OpenIddictEntityFrameworkCoreApplication", b =>

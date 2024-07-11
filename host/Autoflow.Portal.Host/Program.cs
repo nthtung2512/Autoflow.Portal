@@ -104,6 +104,9 @@ if (app.Environment.IsDevelopment()) // Check if the app is running in the Devel
 // Enable middleware to redirect HTTP requests to HTTPS
 app.UseHttpsRedirection();
 
+app.UseDeveloperExceptionPage();
+app.UseRouting();
+
 // Adds middleware to handle authorization checks for incoming requests.
 app.UseAuthentication();
 app.UseAuthorization();
@@ -112,6 +115,6 @@ app.UseCors("PortalChatBox");
 app.MapHub<ChatHub>("/chatHub");
 // Maps controller endpoints to the request pipeline, setting up routes to handle incoming HTTP requests.
 app.MapControllers();
-
+app.MapDefaultControllerRoute();
 // Starts the application and begins listening for incoming HTTP requests.
 app.Run();
