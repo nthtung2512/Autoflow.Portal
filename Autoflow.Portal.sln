@@ -33,6 +33,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Autoflow.Portal.ConsoleApp"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Autoflow.Portal.Auth", "src\Autoflow.Portal.Auth\Autoflow.Portal.Auth.csproj", "{A6FBA6A0-4BF5-4F6B-9990-F771D0662B86}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Autoflow.Portal.ConsoleApp.Services", "src\Autoflow.Portal.ConsoleApp.Services\Autoflow.Portal.ConsoleApp.Services.csproj", "{1FACA58C-6F56-4D1B-B048-0122A1867130}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Autoflow.Portal.ConsoleApp1", "src\Autoflow.Portal.ConsoleApp1\Autoflow.Portal.ConsoleApp1.csproj", "{61F4847C-C001-4154-85E4-FB85E7A1AC9A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Autoflow.Portal.ConsoleApp2", "src\Autoflow.Portal.ConsoleApp2\Autoflow.Portal.ConsoleApp2.csproj", "{09520117-8DBE-476E-80BB-0B20FC3A429F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Autoflow.Portal.ConsoleApp3", "src\Autoflow.Portal.ConsoleApp3\Autoflow.Portal.ConsoleApp3.csproj", "{E0A571F0-AA35-4F2D-BD43-840DE3DAF5B0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -83,6 +91,22 @@ Global
 		{A6FBA6A0-4BF5-4F6B-9990-F771D0662B86}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A6FBA6A0-4BF5-4F6B-9990-F771D0662B86}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A6FBA6A0-4BF5-4F6B-9990-F771D0662B86}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1FACA58C-6F56-4D1B-B048-0122A1867130}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1FACA58C-6F56-4D1B-B048-0122A1867130}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1FACA58C-6F56-4D1B-B048-0122A1867130}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1FACA58C-6F56-4D1B-B048-0122A1867130}.Release|Any CPU.Build.0 = Release|Any CPU
+		{61F4847C-C001-4154-85E4-FB85E7A1AC9A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{61F4847C-C001-4154-85E4-FB85E7A1AC9A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{61F4847C-C001-4154-85E4-FB85E7A1AC9A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{61F4847C-C001-4154-85E4-FB85E7A1AC9A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{09520117-8DBE-476E-80BB-0B20FC3A429F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{09520117-8DBE-476E-80BB-0B20FC3A429F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{09520117-8DBE-476E-80BB-0B20FC3A429F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{09520117-8DBE-476E-80BB-0B20FC3A429F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E0A571F0-AA35-4F2D-BD43-840DE3DAF5B0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E0A571F0-AA35-4F2D-BD43-840DE3DAF5B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E0A571F0-AA35-4F2D-BD43-840DE3DAF5B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E0A571F0-AA35-4F2D-BD43-840DE3DAF5B0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -99,6 +123,10 @@ Global
 		{EBC83519-474D-42FD-8E2D-13D014BE415D} = {BBE2D485-EB18-45A4-9C8E-756F1061D953}
 		{1BA53315-6B27-4603-AA15-DE82AB0236DE} = {BBE2D485-EB18-45A4-9C8E-756F1061D953}
 		{A6FBA6A0-4BF5-4F6B-9990-F771D0662B86} = {BBE2D485-EB18-45A4-9C8E-756F1061D953}
+		{1FACA58C-6F56-4D1B-B048-0122A1867130} = {BBE2D485-EB18-45A4-9C8E-756F1061D953}
+		{61F4847C-C001-4154-85E4-FB85E7A1AC9A} = {BBE2D485-EB18-45A4-9C8E-756F1061D953}
+		{09520117-8DBE-476E-80BB-0B20FC3A429F} = {BBE2D485-EB18-45A4-9C8E-756F1061D953}
+		{E0A571F0-AA35-4F2D-BD43-840DE3DAF5B0} = {BBE2D485-EB18-45A4-9C8E-756F1061D953}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {59B06982-AA48-4108-9C37-5CD67FBEFAB1}

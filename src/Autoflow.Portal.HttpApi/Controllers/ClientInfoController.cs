@@ -18,7 +18,7 @@ namespace Autoflow.Portal.HttpApi.Controllers
             _clientInfoRepository = clientInfoRepository;
         }
 
-        [Authorize(AuthenticationSchemes = OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme, Policy = "UserOnly")]
+        [Authorize(AuthenticationSchemes = OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme)]
         [HttpGet]
         public async Task<IActionResult> GetClientInfo()
         {

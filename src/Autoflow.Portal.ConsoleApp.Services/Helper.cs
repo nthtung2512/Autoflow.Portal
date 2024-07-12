@@ -1,11 +1,13 @@
 ﻿using Autoflow.Portal.Domain.Shared;
+using Microsoft.AspNetCore.SignalR;
+using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.DependencyInjection;
 using OpenIddict.Client;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Text.Json;
 
-namespace Autoflow.Portal.ConsoleApp
+namespace Autoflow.Portal.ConsoleApp.Services
 {
     public static class Helper
     {
@@ -33,7 +35,9 @@ namespace Autoflow.Portal.ConsoleApp
             }
             else if (response.StatusCode == HttpStatusCode.Forbidden)
             {
-                throw new UnauthorizedAccessException("Access to organization messages is forbidden.");
+                //throw new UnauthorizedAccessException("Access to organization messages is forbidden.");
+                Console.WriteLine("Access to organization messages is forbidden.");
+                return null;
             }
             else
             {
@@ -58,7 +62,8 @@ namespace Autoflow.Portal.ConsoleApp
             }
             else if (response.StatusCode == HttpStatusCode.Forbidden)
             {
-                return "Access to organization name is forbidden.";
+                Console.WriteLine("Access to organization name is forbidden.");
+                return null;
             }
             else
             {
@@ -122,7 +127,25 @@ namespace Autoflow.Portal.ConsoleApp
             {
                 Console.WriteLine(message);
             }
-            Console.WriteLine();
+        }
+
+        public static async Task SendMessagesOptionAsync(this IServiceProvider provider, List<string> messages, ClientInfo fullClientInfo, string organizationName, string token, HubConnection hubConnection)
+        {
+            //Console.Write("Send message (Press q or Q to quit): ");
+            var message = Console.ReadLine();
+
+            if (message.Equals("q", StringComparison.OrdinalIgnoreCase))
+            {
+                Console.WriteLine("Exiting the application.");
+                Environment.Exit(0);
+            }
+
+            await provider.SendMessageAsync(token, message);
+
+            // Send the message to the server via SignalR
+            await hubConnection.InvokeAsync("SendSimpleMessage", message, fullClientInfo.OrganizationId);
+            // Wait for a moment to allow the message to be processed
+            await Task.Delay(1000); // Adjust the delay as necessary
         }
     }
 }

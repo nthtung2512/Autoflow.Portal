@@ -39,6 +39,9 @@ namespace Autoflow.Portal.Host.Hubs
         private readonly static ConnectionMapping<string> _connections =
             new ConnectionMapping<string>();
 
+        private readonly static ConnectionMapping<string> _connectionsClient =
+            new ConnectionMapping<string>();
+
         public async Task JoinConversation(string conversationId)
         {
             await Groups.AddToGroupAsync(Context.ConnectionId, conversationId);
@@ -51,6 +54,23 @@ namespace Autoflow.Portal.Host.Hubs
             _connections.Remove(conversationId, Context.ConnectionId);
         }
 
+        public async Task JoinGroup(Guid organizationId)
+        {
+            await Groups.AddToGroupAsync(Context.ConnectionId, organizationId.ToString());
+            _connectionsClient.Add(organizationId.ToString(), Context.ConnectionId);
+        }
+
+        public async Task LeaveGroup(Guid organizationId)
+        {
+            await Groups.RemoveFromGroupAsync(Context.ConnectionId, organizationId.ToString());
+            _connectionsClient.Remove(organizationId.ToString(), Context.ConnectionId);
+        }
+
+        public async Task SendSimpleMessage(string message, Guid organizationId)
+        {
+            await Clients.GroupExcept(organizationId.ToString(), Context.ConnectionId).SendAsync("ReceiveSimpleMessage", message);
+        }
+
         public async Task SendMessage(MessageDTO messageDTO)
         {
             var connections = _connections.GetConnections(messageDTO.ConversationId.ToString());
@@ -58,11 +78,6 @@ namespace Autoflow.Portal.Host.Hubs
             {
                 await Clients.Group(messageDTO.ConversationId.ToString()).SendAsync("ReceiveMessage", messageDTO);
             }
-        }
-
-        public async Task SendSimpleMessage(string message)
-        {
-            await Clients.All.SendAsync("ReceiveSimpleMessage", message);
         }
 
         public async Task DeleteMessage(MessageDTO messageDTO)

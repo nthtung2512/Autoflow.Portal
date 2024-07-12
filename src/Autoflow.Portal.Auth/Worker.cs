@@ -30,13 +30,58 @@ namespace Autoflow.Portal.Auth
 
             // The paramter "chathub" is the client_id of the client application.
             // This one creates new client application if it doesn't exist.
-            if (await manager.FindByClientIdAsync(_authenticationEndPoint.ClientId) == null)
+            if (await manager.FindByClientIdAsync("chathub") == null)
             {
                 await manager.CreateAsync(new OpenIddictApplicationDescriptor
                 {
-                    ClientId = _authenticationEndPoint.ClientId,
-                    ClientSecret = _authenticationEndPoint.ClientSecret,
-                    DisplayName = _authenticationEndPoint.DisplayName,
+                    ClientId = "chathub",
+                    ClientSecret = "293f9bac-8cb1-4b59-8756-1b5193526980",
+                    DisplayName = "ChatHub",
+                    Permissions =
+                {
+                    Permissions.Endpoints.Token,
+                    Permissions.GrantTypes.ClientCredentials,
+                    Permissions.Scopes.Roles
+                }
+                });
+            }
+            if (await manager.FindByClientIdAsync("chathub1") == null)
+            {
+                await manager.CreateAsync(new OpenIddictApplicationDescriptor
+                {
+                    ClientId = "chathub1",
+                    ClientSecret = "d0270316-b546-4c2d-9726-ff2c1eb7f25d",
+                    DisplayName = "ChatHub1",
+                    Permissions =
+                {
+                    Permissions.Endpoints.Token,
+                    Permissions.GrantTypes.ClientCredentials,
+                    Permissions.Scopes.Roles
+                }
+                });
+            }
+            if (await manager.FindByClientIdAsync("chathub2") == null)
+            {
+                await manager.CreateAsync(new OpenIddictApplicationDescriptor
+                {
+                    ClientId = "chathub2",
+                    ClientSecret = "594f2eef-5d96-47ab-9e35-062934c68d4b",
+                    DisplayName = "ChatHub2",
+                    Permissions =
+                {
+                    Permissions.Endpoints.Token,
+                    Permissions.GrantTypes.ClientCredentials,
+                    Permissions.Scopes.Roles
+                }
+                });
+            }
+            if (await manager.FindByClientIdAsync("chathubAdmin") == null)
+            {
+                await manager.CreateAsync(new OpenIddictApplicationDescriptor
+                {
+                    ClientId = "chathubAdmin",
+                    ClientSecret = "60602bff-f912-4a6d-8ba1-c2f5b543cd71",
+                    DisplayName = "ChatAdmin",
                     Permissions =
                 {
                     Permissions.Endpoints.Token,
