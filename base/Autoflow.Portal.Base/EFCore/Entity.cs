@@ -1,14 +1,12 @@
-﻿using Autoflow.Portal.Base.EFCore.Utils;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using Autoflow.Portal.Base.EFCore.Utils;
 
 namespace Autoflow.Portal.Base.EFCore
 {
     [Serializable]
     public abstract class Entity : IEntity
     {
-        protected Entity()
-        {
-        }
+        protected Entity() { }
 
         /// <inheritdoc/>
         public override string ToString()

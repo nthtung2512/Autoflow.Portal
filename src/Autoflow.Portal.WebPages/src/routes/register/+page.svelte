@@ -1,13 +1,13 @@
 <script lang="ts">
     import type { Auth, User } from '$lib/types/interfaces';
-    import AuthComponent from '../../components/AuthComponent.svelte';
+    import AuthComponent from '$lib/components/AuthComponent.svelte';
     import { goto } from '$app/navigation';
-    import { usersStore } from '../../stores/userStore';
+    import { usersStore } from '$lib/stores/userStore';
     import { v4 as uuidv4 } from 'uuid';
     import '$lib/app.css';
 	import { onDestroy, onMount } from 'svelte';
-    import {startHubConnection, stopHubConnection} from '../../services/signalrService';
-    import {postUserMessage} from '../../services/signalrService';
+    import {startHubConnection, stopHubConnection} from '$lib/services/signalrService';
+    import {postUserMessage} from '$lib/services/signalrService';
     onMount(() => {
 		startHubConnection();
 	});

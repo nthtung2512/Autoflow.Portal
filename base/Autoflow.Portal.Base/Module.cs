@@ -1,9 +1,9 @@
-﻿using Microsoft.Extensions.Hosting;
+﻿using Microsoft.Extensions.DependencyInjection;
 
 namespace Autoflow.Portal.Base
 {
     public abstract class Module
     {
-        public abstract void ConfigureService(IHostApplicationBuilder builder);
+        public abstract void ConfigureService(IServiceCollection services);
     }
 }

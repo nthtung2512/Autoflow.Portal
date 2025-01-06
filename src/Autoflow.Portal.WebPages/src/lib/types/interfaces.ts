@@ -59,3 +59,8 @@ export interface ErrorData {
 export interface MessageHandlerContext {
     registerMessageHandler: (handler: (user: User) => void) => void;
 }
+
+export interface ResponseData<T> {
+	data: T | null;
+	error: string | null;
+};

@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="OpenIddict.AspNetCore" Version="5.7.0" />
+    <PackageReference Include="OpenIddict.EntityFrameworkCore" Version="5.7.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\src\Autoflow.Portal.Application\Autoflow.Portal.Application.csproj" />
+    <ProjectReference Include="..\src\Autoflow.Portal.EntityFrameworkCore\Autoflow.Portal.EntityFrameworkCore.csproj" />
+  </ItemGroup>
+
+</Project>

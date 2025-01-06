@@ -2,18 +2,17 @@
 using Autoflow.Portal.Base;
 using Autoflow.Portal.Infrastructure.Repositories;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 
 namespace Autoflow.Portal.Application
 {
     public class PortalApplicationModule : Module
     {
-        public override void ConfigureService(IHostApplicationBuilder builder)
+        public override void ConfigureService(IServiceCollection services)
         {
-            builder.Services.AddScoped<IUserRepository, UserRepository>();
-            builder.Services.AddScoped<IMessageRepository, MessageRepository>();
-            builder.Services.AddScoped<IConversationRepository, ConversationRepository>();
-            builder.Services.AddScoped<IUserConversationMapRepository, UserConversationMapRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IMessageRepository, MessageRepository>();
+            services.AddScoped<IConversationRepository, ConversationRepository>();
+            services.AddScoped<IUserConversationMapRepository, UserConversationMapRepository>();
         }
     }
 }

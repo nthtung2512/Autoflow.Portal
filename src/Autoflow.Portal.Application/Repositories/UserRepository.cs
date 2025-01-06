@@ -38,5 +38,10 @@ namespace Autoflow.Portal.Infrastructure.Repositories
                 await _context.SaveChangesAsync();
             }
         }
+
+        public Task<User?> GetUserByUsernameAsync(string username)
+        {
+            return _context.Users.FirstOrDefaultAsync(u => u.Username == username);
+        }
     }
 }

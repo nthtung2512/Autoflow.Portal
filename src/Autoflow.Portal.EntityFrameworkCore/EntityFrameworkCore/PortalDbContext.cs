@@ -19,6 +19,7 @@ namespace Autoflow.Portal.EntityFrameworkCore.EntityFrameworkCore
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+            builder.UseAuthPrivateEntities();
 
             // Configuring User
             builder.Entity<User>(b =>

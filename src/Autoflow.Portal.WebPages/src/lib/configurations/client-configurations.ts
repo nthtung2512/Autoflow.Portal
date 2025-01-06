@@ -1,0 +1,18 @@
+import {
+	PUBLIC_AUTHORITY,
+	PUBLIC_BASE_ROUTE,
+	PUBLIC_CLIENT_ID,
+	PUBLIC_CLIENT_SECRET,
+	PUBLIC_REDIRECT_URI,
+} from '$env/static/public';
+
+const ClientConfiguration = {
+	auth: {
+		AUTHORITY: PUBLIC_AUTHORITY,
+		CLIENT_ID: PUBLIC_CLIENT_ID,
+		CLIENT_SECRET: PUBLIC_CLIENT_SECRET,
+		REDIRECT_URI: PUBLIC_BASE_ROUTE + PUBLIC_REDIRECT_URI,
+	},
+} as const;
+
+export default ClientConfiguration;

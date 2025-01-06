@@ -79,31 +79,5 @@ namespace Autoflow.Portal.HttpApi.Controllers
             await _userRepository.DeleteUserAsync(userId);
             return NoContent();
         }
-
-        [HttpPost("login")]
-        public async Task<ActionResult<UserDTO>> Login([FromBody] UserLoginRequestDTO request)
-        {
-            if (request == null || string.IsNullOrEmpty(request.Username) || string.IsNullOrEmpty(request.Password))
-            {
-                return BadRequest("Invalid client request");
-            }
-
-            var users = await _userRepository.GetAllUsersAsync();
-            var user = users.FirstOrDefault(u => u.Username == request.Username && u.Password == request.Password);
-
-            if (user == null)
-            {
-                return Unauthorized(new { Message = "Invalid username or password" });
-            }
-
-            var userResponse = new UserDTO
-            {
-                Id = user.Id,
-                Username = user.Username,
-                Password = ""
-            };
-
-            return Ok(userResponse);
-        }
     }
 }

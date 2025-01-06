@@ -10,6 +10,11 @@
 		<FrameworkReference Include="Microsoft.AspNetCore.App" />
 	</ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="OpenIddict.AspNetCore" Version="5.7.0" />
+    <PackageReference Include="OpenIddict.EntityFrameworkCore" Version="5.7.0" />
+  </ItemGroup>
+
 	<ItemGroup>
 	  <ProjectReference Include="..\Autoflow.Portal.Application.Contracts\Autoflow.Portal.Application.Contracts.csproj" />
 	  <ProjectReference Include="..\Autoflow.Portal.Application\Autoflow.Portal.Application.csproj" />
